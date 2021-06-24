@@ -71,7 +71,7 @@ inline void Assert(bool b, const string& hint) {
 class TestRunner {
 public:
     template <class TestFunc>
-    void RunTest(TestFunc func, const string& test_name) {
+    void RunTest(TestFunc func, const string& test_name) const {
         try {
             func();
             cerr << test_name << " OK" << endl;
@@ -92,7 +92,7 @@ public:
     }
 
 private:
-    int fail_count = 0;
+    mutable int fail_count = 0;
 };
 
 #define ASSERT_EQUAL(x, y) {            \

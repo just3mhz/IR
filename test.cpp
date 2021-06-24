@@ -1,4 +1,5 @@
 #include "test_framework/test_runner.h"
+#include "document/tests/tests.h"
 
 void TestAll();
 
@@ -14,6 +15,6 @@ void SimpleTest() {
 
 void TestAll() {
     TestRunner testRunner;
-    RUN_TEST(testRunner, SimpleTest);
+    document::tests::TestAll(testRunner);
 }
 
