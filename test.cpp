@@ -3,14 +3,8 @@
 
 void TestAll();
 
-int main() {
+int main(int argc, char **argv) {
     TestAll();
-}
-
-void SimpleTest() {
-    ASSERT(true);
-    ASSERT_EQUAL(1, 1);
-    ASSERT_EQUAL(1, 2)
 }
 
 void TestAll() {
