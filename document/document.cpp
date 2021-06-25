@@ -38,5 +38,14 @@ const std::string& Document::text() const
 {
     return text_;
 }
+std::string& Document::title()
+{
+    return title_;
+}
+
+const std::string& Document::title() const
+{
+    return title_;
+}
 
 } // namespace document
