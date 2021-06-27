@@ -7,7 +7,7 @@ namespace document {
 class Document {
 public:
     Document() = default;
-    Document(uint64_t id, std::string url, std::string text);
+    Document(uint64_t id, std::string url, std::string title, std::string text);
 
     uint64_t& id();
     const uint64_t& id() const;

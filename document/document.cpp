@@ -2,9 +2,10 @@
 
 namespace document {
 
-Document::Document(uint64_t id, std::string url, std::string text)
+Document::Document(uint64_t id, std::string url, std::string title, std::string text)
     : id_(id)
     , url_(std::move(url))
+    , title_(std::move(title))
     , text_(std::move(text))
 {
 }
