@@ -9,18 +9,18 @@ namespace {
 
 void TestTokenizeDocument() {
     TokenizedDocument expected;
-    expected.doc_id = 0;
+    expected.docId = 0;
     expected.url = "URL";
-    expected.tokenized_title = {"Some", "useful", "title"};
-    expected.tokenized_text = {"Some", "useful", "text"};
+    expected.tokenizedTitle = {"Some", "useful", "title"};
+    expected.tokenizedText = {"Some", "useful", "text"};
 
     document::Document document(0, "URL", "Some    useful\ttitle", "Some\nuseful\ntext");
 
-    TokenizedDocument result = TokenizeDocument(document);
-    ASSERT_EQUAL(result.doc_id, expected.doc_id)
+    TokenizedDocument result = tokenizeDocument(document);
+    ASSERT_EQUAL(result.docId, expected.docId)
     ASSERT_EQUAL(result.url, expected.url)
-    ASSERT_EQUAL(result.tokenized_title, expected.tokenized_title);
-    ASSERT_EQUAL(result.tokenized_text, expected.tokenized_text)
+    ASSERT_EQUAL(result.tokenizedTitle, expected.tokenizedTitle);
+    ASSERT_EQUAL(result.tokenizedText, expected.tokenizedText)
 }
 
 } // namespace

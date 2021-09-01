@@ -25,7 +25,7 @@ add_executable(IR
         document/document_reader_iterator.cpp
         document/document_reader_iterator.h
         tokenization/tokenization.cpp
-        tokenization/tokenization.h tokenization/tests/tests.h tokenization/tests/tests.cpp auxiliary/dictionary.cpp auxiliary/dictionary.h auxiliary/tests/test_dictionary.cpp)
+        tokenization/tokenization.h tokenization/tests/tests.h tokenization/tests/tests.cpp auxiliary/dictionary.cpp auxiliary/dictionary.h auxiliary/tests/test_dictionary.cpp BSBI/bsbi.h)
 add_executable(IR_tests
         test.cpp
         document/document.cpp
