@@ -8,7 +8,7 @@ namespace {
 using Token = std::string;
 using Tokens = std::vector<Token>;
 
-Tokens Tokenize(const std::string& content) {
+Tokens tokenize(const std::string& content) {
     Tokens tokens;
     Token currentToken;
     std::istringstream is(content);
@@ -20,12 +20,12 @@ Tokens Tokenize(const std::string& content) {
 
 } // namespace
 
-TokenizedDocument TokenizeDocument(const document::Document& document) {
+TokenizedDocument tokenizeDocument(const document::Document& document) {
     TokenizedDocument result;
-    result.doc_id = document.id();
+    result.docId = document.id();
     result.url = document.url();
-    result.tokenized_title = Tokenize(document.title());
-    result.tokenized_text = Tokenize(document.text());
+    result.tokenizedTitle = tokenize(document.title());
+    result.tokenizedText = tokenize(document.text());
     return result;
 }
 

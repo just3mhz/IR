@@ -2,23 +2,17 @@
 
 namespace auxiliary {
 
-bool HashDictionary::hasTerm(const std::string& term)
+bool SingletonDictionary::hasTerm(const std::string& term) const
 {
+    std::lock_guard<std::mutex> lock(mutex_);
     return dict_.count(term) != 0;
 }
 
-void HashDictionary::addTerm(const std::string& term)
+uint64_t SingletonDictionary::getTermId(const std::string& term)
 {
-    if (hasTerm(term))
-        throw std::runtime_error("Attempt to add existing term to dictionary");
-    uint64_t termId = dict_.size();
-    dict_.emplace(term, termId);
-}
-
-uint64_t HashDictionary::getTermId(const std::string& term)
-{
-    if (!hasTerm(term))
-        throw std::runtime_error("Attempt to add existing term to dictionary");
+    std::lock_guard<std::mutex> lock(mutex_);
+    if (!dict_.contains(term))
+        return (dict_[term] = dict_.size());
     return dict_[term];
 }
 

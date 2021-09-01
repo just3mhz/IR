@@ -8,12 +8,12 @@
 namespace tokenization {
 
 struct TokenizedDocument {
-    std::uint64_t doc_id;
+    std::uint64_t docId;
     std::string url;
-    std::vector<std::string> tokenized_title;
-    std::vector<std::string> tokenized_text;
+    std::vector<std::string> tokenizedTitle;
+    std::vector<std::string> tokenizedText;
 };
 
-TokenizedDocument TokenizeDocument(const document::Document& document);
+TokenizedDocument tokenizeDocument(const document::Document& document);
 
 } // namespace tokenization

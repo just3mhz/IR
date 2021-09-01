@@ -1,36 +1,15 @@
 #include "../dictionary.h"
 
-#include <memory>
-
 #include <gtest/gtest.h>
 
-
-TEST(Dictionary, AddTerm)
+TEST(SingletonDictionary, BaseTest)
 {
-    auto dict = std::make_shared<auxiliary::HashDictionary>();
+    ASSERT_EQ(auxiliary::SingletonDictionary::getInstance().getTermId("term1"), 0);
+    ASSERT_EQ(auxiliary::SingletonDictionary::getInstance().getTermId("term2"), 1);
+    ASSERT_EQ(auxiliary::SingletonDictionary::getInstance().getTermId("term3"), 2);
 
-    auto addTerm = [dict](const std::string& term, uint64_t termId) {
-        ASSERT_FALSE(dict->hasTerm(term));
-        dict->addTerm(term);
-        ASSERT_TRUE(dict->hasTerm(term));
-        ASSERT_EQ(dict->getTermId(term), termId);
-    };
+    ASSERT_EQ(auxiliary::SingletonDictionary::getInstance().getTermId("term1"), 0);
 
-    addTerm("term1", 0);
-    addTerm("term2", 1);
-    addTerm("term3", 2);
-}
-
-TEST(Dictionary, GetNonExistantTerm)
-{
-    auto dict = std::make_shared<auxiliary::HashDictionary>();
-    ASSERT_THROW(dict->getTermId("term1"), std::runtime_error);
-}
-
-TEST(Dictionary, AddExistingTerm)
-{
-    auto dict = std::make_shared<auxiliary::HashDictionary>();
-    dict->addTerm("term1");
-
-    ASSERT_THROW(dict->addTerm("term1"), std::runtime_error);
+    ASSERT_TRUE(auxiliary::SingletonDictionary::getInstance().hasTerm("term1"));
+    ASSERT_FALSE(auxiliary::SingletonDictionary::getInstance().hasTerm("term5"));
 }

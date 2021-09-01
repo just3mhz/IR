@@ -2,24 +2,27 @@
 
 #include <iostream>
 #include <unordered_map>
+#include <mutex>
 
 namespace auxiliary {
 
-class Dictionary {
-    virtual bool hasTerm(const std::string&) = 0;
-    virtual void addTerm(const std::string&) = 0;
-    virtual uint64_t getTermId(const std::string&) = 0;
-};
-
-class HashDictionary final : Dictionary {
+class SingletonDictionary {
 public:
-    HashDictionary() = default;
+    static SingletonDictionary& getInstance() {
+        static SingletonDictionary instance;
+        return instance;
+    }
 
-    bool hasTerm(const std::string&) override;
-    void addTerm(const std::string&) override;
-    uint64_t getTermId(const std::string&) override;
+    SingletonDictionary(const SingletonDictionary&) = delete;
+    SingletonDictionary(SingletonDictionary&&) = delete;
 
+    bool hasTerm(const std::string&) const;
+    uint64_t getTermId(const std::string&);
+
+protected:
+    SingletonDictionary() = default;
 private:
+    mutable std::mutex mutex_;
     std::unordered_map<std::string, uint64_t> dict_;
 };
 
