@@ -28,6 +28,19 @@ TEST_F(DictFixture, BaseTest)
     ASSERT_FALSE(dict_.hasTerm("term5"));
 }
 
+TEST_F(DictFixture, TestClear)
+{
+   ASSERT_FALSE(dict_.hasTerm("term1"));
+
+   dict_.getTermId("term1");
+
+   ASSERT_TRUE(dict_.hasTerm("term1"));
+
+   dict_.clear();
+
+   ASSERT_FALSE(dict_.hasTerm("term1"));
+}
+
 TEST_F(DictFixture, TestDump)
 {
     ASSERT_FALSE(dict_.hasTerm("term1"));
