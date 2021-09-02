@@ -19,6 +19,10 @@ public:
     bool hasTerm(const std::string&) const;
     uint64_t getTermId(const std::string&);
 
+    void dump(const std::string& path) const;
+
+    void clear();
+
 protected:
     SingletonDictionary() = default;
 private:
