@@ -12,6 +12,10 @@ struct Record
 {
     uint64_t termId;
     uint64_t docId;
+
+    bool operator==(const Record& other) const {
+        return termId == other.termId && docId == other.docId;
+    }
 };
 
 template<class Iterator>

@@ -49,7 +49,8 @@ add_executable(IR_tests
         tokenization/tests/tests.cpp
         auxiliary/dictionary.cpp
         auxiliary/dictionary.h
-        auxiliary/tests/test_dictionary.cpp)
+        auxiliary/tests/test_dictionary.cpp
+        bsbi/tests/test_bsbi.cpp)
 
 target_link_libraries(IR_tests gtest gtest_main)
 add_test(NAME IR_tests COMMAND IR_tests)

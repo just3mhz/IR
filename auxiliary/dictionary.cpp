@@ -3,6 +3,7 @@
 #include <fstream>
 #include <vector>
 #include <algorithm>
+#include <cassert>
 
 namespace auxiliary {
 
