@@ -15,7 +15,7 @@ int main(int argc, char **argv) {
 
 void TestAll() {
     TestRunner testRunner;
-    document::tests::TestAll(testRunner);
+    // document::tests::TestAll(testRunner);
     tokenization::tests::TestAll(testRunner);
 }
 
