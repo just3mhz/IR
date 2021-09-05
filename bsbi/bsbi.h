@@ -26,13 +26,11 @@ std::vector<Record> invertedIndexForBlockSingleThread(Iterator begin, Iterator e
     std::vector<Record> records;
     auto& dict = auxiliary::SingletonDictionary::getInstance();
     for(Iterator it = begin; it != end; ++it) {
-        const tokenization::TokenizedDocument& doc = *it;
-        for(const std::string& term: doc.tokenizedTitle) {
-            records.push_back({ dict.getTermId(term), doc.docId });
-        }
-        for(const std::string& term: doc.tokenizedText) {
-            records.push_back({ dict.getTermId(term), doc.docId });
-        }
+        const document::Document& doc = *it;
+        for(const std::string& term: doc.title())
+            records.push_back({dict.getTermId(term), doc.id()});
+        for(const std::string& term: doc.text())
+            records.push_back({dict.getTermId(term), doc.id()});
     }
     return records;
 }
