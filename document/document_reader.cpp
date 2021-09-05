@@ -8,10 +8,10 @@ namespace document {
 const std::regex DocumentReader::DOC_BEGIN_REGEX{R"(<doc id="(.*)\" url="(.*)\" title="(.*)\">)"};
 const std::regex DocumentReader::DOC_END_REGEX{"</doc>"};
 
-DocumentReader::DocumentReader(const std::string& filename, std::size_t bufferSize, std::unique_ptr<Tokenizer> tokenizer)
+DocumentReader::DocumentReader(const std::string& filename, std::size_t bufferSize, Tokenizer* tokenizer)
     : documentsStream_()
     , bufferSize_(bufferSize)
-    , tokenizer_(std::move(tokenizer))
+    , tokenizer_(tokenizer)
 {
     documentsStream_.open(filename);
     assert(documentsStream_.is_open());
@@ -67,15 +67,18 @@ bool DocumentReader::readNextDocIntoBuffer() const
     Document document;
 
     std::string docBegin;
-    if (!std::getline(documentsStream_, docBegin, '\n'))
+    if (!std::getline(documentsStream_, docBegin, '\n')) {
         throw std::runtime_error("Unexpected EOF");
+    }
 
-    if (docBegin == "</documents>")
+    if (docBegin == "</documents>") {
         return false;
+    }
 
     std::smatch match;
-    if (!std::regex_match(docBegin, match, DOC_BEGIN_REGEX))
+    if (!std::regex_match(docBegin, match, DOC_BEGIN_REGEX)) {
         throw std::runtime_error("First line doesn't match with DOC_BEGIN_REGEX");
+    }
 
     document.id() = std::stoi(match[1]);
     document.url() = match[2];

@@ -1,17 +1,9 @@
-#include "document/document.h"
-#include "document/document_reader.h"
-#include "tokenization/tokenization.h"
-
-#include <iostream>
+#include "bsbi/bsbi.h"
 
 int main() {
-    document::DocumentReader reader(
+    bsbi::BlockedSortBasedIndexer indexer(2);
+    indexer.makeIndex(
         "/home/just3mhz/IR/test_data/block01.xml",
-        10,
-        std::make_unique<tokenization::SimpleTokenizer>());
-    while (reader) {
-        document::Document doc = reader.readNext();
-        std::cout << doc << "\n\n";
-    }
+        "output.txt");
     return 0;
 }

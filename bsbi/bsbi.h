@@ -1,6 +1,8 @@
 #pragma once
 
-#include "../tokenization/tokenization.h"
+#include "record.h"
+#include "../document/document.h"
+#include "../document/document_reader.h"
 #include "../auxiliary/dictionary.h"
 
 #include <iostream>
@@ -10,18 +12,27 @@
 
 namespace bsbi {
 
-struct Record
-{
-    uint64_t termId;
-    uint64_t docId;
+class BlockedSortBasedIndexer {
+public:
+    BlockedSortBasedIndexer(std::size_t blockSize);
 
-    bool operator==(const Record& other) const {
-        return termId == other.termId && docId == other.docId;
-    }
+    void makeIndex(const std::string& inputFilePath, const std::string& outputFilePath);
+
+    // TODO: Move to BlockProcessor
+    template<class Iterator>
+    std::vector<Record> processBlock(Iterator begin, Iterator end, size_t threads=1);
+
+    // TODO: Move to BlockProcessor
+    template<class Iterator>
+    std::vector<Record> processBlockSingleThread(Iterator begin, Iterator end);
+private:
+    std::size_t blockSize_;
+    std::shared_ptr<tokenization::Tokenizer> tokenizer_;
+    std::unique_ptr<RecordDumper> recordDumper_;
 };
 
 template<class Iterator>
-std::vector<Record> invertedIndexForBlockSingleThread(Iterator begin, Iterator end)
+std::vector<Record> BlockedSortBasedIndexer::processBlockSingleThread(Iterator begin, Iterator end)
 {
     std::vector<Record> records;
     auto& dict = auxiliary::SingletonDictionary::getInstance();
@@ -36,7 +47,7 @@ std::vector<Record> invertedIndexForBlockSingleThread(Iterator begin, Iterator e
 }
 
 template<class Iterator>
-std::vector<Record> invertedIndexForBlock(Iterator begin, Iterator end, size_t threads=1)
+std::vector<Record> BlockedSortBasedIndexer::processBlock(Iterator begin, Iterator end, size_t threads)
 {
     assert(threads > 0);
 
@@ -46,7 +57,7 @@ std::vector<Record> invertedIndexForBlock(Iterator begin, Iterator end, size_t t
     std::vector<std::future<std::vector<Record>>> futures;
     for(size_t offset = 0; offset < blockSize; offset += step) {
         futures.push_back(
-            std::async(invertedIndexForBlockSingleThread<Iterator>,
+            std::async(&BlockedSortBasedIndexer::processBlockSingleThread<Iterator>, this,
                        begin + offset,
                        begin + std::min(offset + step, blockSize)));
     }

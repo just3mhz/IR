@@ -45,12 +45,14 @@ protected:
 
 TEST_F(BsbiTestFixture, TestInvertedIndexForBlockSingleThread)
 {
-    std::vector<bsbi::Record> actual = bsbi::invertedIndexForBlockSingleThread(docs.begin(), docs.end());
+    bsbi::BlockedSortBasedIndexer indexer(2);
+    std::vector<bsbi::Record> actual = indexer.processBlockSingleThread(docs.begin(), docs.end());
     ASSERT_EQ(actual, expected);
 }
 
 TEST_F(BsbiTestFixture, TestInvertedIndexForBlock)
 {
-    std::vector<bsbi::Record> actual = bsbi::invertedIndexForBlock(docs.begin(), docs.end(), 2);
+    bsbi::BlockedSortBasedIndexer indexer(2);
+    std::vector<bsbi::Record> actual = indexer.processBlock(docs.begin(), docs.end(), 2);
     ASSERT_EQ(actual, expected);
 }

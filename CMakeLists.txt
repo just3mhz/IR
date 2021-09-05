@@ -24,7 +24,7 @@ add_executable(IR
         tokenization/tokenization.h
         auxiliary/dictionary.cpp
         auxiliary/dictionary.h
-        bsbi/bsbi.h)
+        bsbi/bsbi.h bsbi/record.h bsbi/record.cpp bsbi/bsbi.cpp)
 
 add_executable(IR_tests
         test.cpp
@@ -37,7 +37,9 @@ add_executable(IR_tests
         auxiliary/dictionary.cpp
         auxiliary/dictionary.h
         auxiliary/tests/test_dictionary.cpp
-        bsbi/tests/test_bsbi.cpp)
+        bsbi/bsbi.h
+        bsbi/bsbi.cpp
+        bsbi/tests/test_bsbi.cpp bsbi/record.h bsbi/record.cpp)
 
 target_link_libraries(IR_tests gtest gtest_main)
 add_test(NAME IR_tests COMMAND IR_tests)

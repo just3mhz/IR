@@ -14,7 +14,7 @@ public:
     const static std::regex DOC_BEGIN_REGEX;
     const static std::regex DOC_END_REGEX;
 
-    DocumentReader(const std::string& filename, std::size_t bufferSize, std::unique_ptr<Tokenizer> tokenizer);
+    DocumentReader(const std::string& filename, std::size_t bufferSize, Tokenizer* tokenizer);
 
     bool allDocsRead() const;
     explicit operator bool() const;
@@ -34,7 +34,7 @@ private:
     mutable std::vector<Document>::iterator it_;
     mutable bool allDocsRead_{false};
 
-    std::unique_ptr<Tokenizer> tokenizer_;
+    Tokenizer* tokenizer_;
 };
 
 } // namespace document
