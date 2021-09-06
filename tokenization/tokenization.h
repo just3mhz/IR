@@ -7,13 +7,13 @@
 
 namespace tokenization {
 
-struct TokenizedDocument {
-    std::uint64_t docId;
-    std::string url;
-    std::vector<std::string> tokenizedTitle;
-    std::vector<std::string> tokenizedText;
+class Tokenizer {
+public:
+    virtual std::vector<std::string> tokenize(const std::string& text) = 0;
 };
 
-TokenizedDocument tokenizeDocument(const document::Document& document);
+class SimpleTokenizer final: public Tokenizer {
+    std::vector<std::string> tokenize(const std::string& text) override;
+};
 
 } // namespace tokenization

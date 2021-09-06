@@ -6,16 +6,16 @@ class BsbiTestFixture: public testing::Test
 {
 protected:
     void SetUp() override {
-        docs = {
-            { .docId = 0,
-                .url = "url",
-                .tokenizedTitle = { "term1", "term2", "term3" },
-                .tokenizedText = { "term2", "term3", "term4" } },
-            { .docId = 1,
-                .url = "url",
-                .tokenizedTitle = { "term3", "term4", "term5" },
-                .tokenizedText = { "term4", "term5", "term6" } }
-        };
+        docs.push_back(document::Document(
+            0,
+            "url",
+            { "term1", "term2", "term3" },
+            { "term2", "term3", "term4" }));
+        docs.push_back(document::Document(
+            1,
+            "url",
+            { "term3", "term4", "term5" },
+            { "term4", "term5", "term6" }));
 
         expected = {
             { .termId = 0, .docId = 0 },
@@ -39,20 +39,20 @@ protected:
         auxiliary::SingletonDictionary::getInstance().clear();
     }
 
-    std::vector<tokenization::TokenizedDocument> docs;
+    std::vector<document::Document> docs;
     std::vector<bsbi::Record> expected;
 };
 
 TEST_F(BsbiTestFixture, TestInvertedIndexForBlockSingleThread)
 {
-    std::vector<bsbi::Record> actual = bsbi::invertedIndexForBlockSingleThread(docs.begin(), docs.end());
-
+    bsbi::BlockedSortBasedIndexer indexer(2);
+    std::vector<bsbi::Record> actual = indexer.processBlockSingleThread(docs.begin(), docs.end());
     ASSERT_EQ(actual, expected);
 }
 
 TEST_F(BsbiTestFixture, TestInvertedIndexForBlock)
 {
-    std::vector<bsbi::Record> actual = bsbi::invertedIndexForBlock(docs.begin(), docs.end(), 2);
-
+    bsbi::BlockedSortBasedIndexer indexer(2);
+    std::vector<bsbi::Record> actual = indexer.processBlock(docs.begin(), docs.end(), 2);
     ASSERT_EQ(actual, expected);
 }

@@ -1,8 +1,30 @@
 #include "document.h"
 
+#include <iostream>
+
 namespace document {
 
-Document::Document(uint64_t id, std::string url, std::string title, std::string text)
+namespace {
+
+template <class T>
+std::ostream& operator<<(std::ostream& os, const std::vector<T>& v)
+{
+    os << "[";
+    bool first = true;
+    for (const T& t: v) {
+        if (!first) {
+            os << ", ";
+        }
+        first = false;
+        os << t;
+    }
+    os << "]";
+    return os;
+}
+
+}
+
+Document::Document(uint64_t id, std::string url, std::vector<std::string> title, std::vector<std::string> text)
     : id_(id)
     , url_(std::move(url))
     , title_(std::move(title))
@@ -30,23 +52,32 @@ const std::string& Document::url() const
     return url_;
 }
 
-std::string& Document::text()
+std::vector<std::string>& Document::text()
 {
     return text_;
 }
 
-const std::string& Document::text() const
+const std::vector<std::string>& Document::text() const
 {
     return text_;
 }
-std::string& Document::title()
+std::vector<std::string>& Document::title()
 {
     return title_;
 }
 
-const std::string& Document::title() const
+const std::vector<std::string>& Document::title() const
 {
     return title_;
+}
+
+std::ostream& operator<<(std::ostream& os, const Document& document)
+{
+    os << "DocId: " << document.id() << '\n';
+    os << "Url: " << document.url() << '\n';
+    os << "Title: " << document.title() << '\n';
+    os << "Text: " << document.text() << '\n';
+    return os;
 }
 
 } // namespace document
