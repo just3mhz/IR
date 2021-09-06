@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-class BsbiTestFixture: public testing::Test
+class BlockProcessorTestFixture : public testing::Test
 {
 protected:
     void SetUp() override {
@@ -43,16 +43,16 @@ protected:
     std::vector<bsbi::Record> expected;
 };
 
-TEST_F(BsbiTestFixture, TestInvertedIndexForBlockSingleThread)
+TEST_F(BlockProcessorTestFixture, TestInvertedIndexForBlockSingleThread)
 {
-    bsbi::BlockedSortBasedIndexer indexer(2);
-    std::vector<bsbi::Record> actual = indexer.processBlockSingleThread(docs.begin(), docs.end());
+    bsbi::BlockProcessor blockProcessor;
+    std::vector<bsbi::Record> actual = blockProcessor.processBlockSingleThread(docs.begin(), docs.end());
     ASSERT_EQ(actual, expected);
 }
 
-TEST_F(BsbiTestFixture, TestInvertedIndexForBlock)
+TEST_F(BlockProcessorTestFixture, TestInvertedIndexForBlock)
 {
-    bsbi::BlockedSortBasedIndexer indexer(2);
-    std::vector<bsbi::Record> actual = indexer.processBlock(docs.begin(), docs.end(), 2);
+    bsbi::BlockProcessor blockProcessor;
+    std::vector<bsbi::Record> actual = blockProcessor.processBlock(docs.begin(), docs.end(), 2);
     ASSERT_EQ(actual, expected);
 }

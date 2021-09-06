@@ -31,7 +31,7 @@ void BlockedSortBasedIndexer::makeIndex(const std::string& inputFilePath, const 
             block.push_back(reader.readNext());
         }
 
-        auto records = processBlockSingleThread(block.begin(), block.end());
+        auto records = blockProcessor_.processBlock(block.begin(), block.end());
         std::sort(records.begin(), records.end());
 
         ++blocksProcessed;
