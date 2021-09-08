@@ -1,5 +1,7 @@
 #include "bsbi.h"
 
+#include "record_merger.h"
+
 namespace bsbi {
 
 namespace {
@@ -51,8 +53,7 @@ void BlockedSortBasedIndexer::makeIndex(const std::string& inputFilePath, const 
         block.clear();
     }
 
-    // TODO: Add merging files to postings
-
+    RecordMerger::merge(tempFiles);
     cleanTempFiles(tempFiles.begin(), tempFiles.end());
 
     auxiliary::SingletonDictionary::getInstance().dump("dict.json");

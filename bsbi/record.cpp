@@ -10,7 +10,7 @@ void RecordDumperTxt::dump(const std::string& filepath, const std::vector<Record
     std::ofstream ofs(filepath);
     assert(ofs.is_open());
 
-    ofs << records.size() << '\n';
+    // ofs << records.size() << '\n';
     for(const auto& record: records) {
         ofs << record.termId << ' ' << record.docId << '\n';
     }

@@ -36,6 +36,4 @@ public:
     void dump(const std::string&, const std::vector<Record>&) override;
 };
 
-
-
 }
