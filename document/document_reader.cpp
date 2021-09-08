@@ -92,7 +92,7 @@ bool DocumentReader::readNextDocIntoBuffer() const
             docEndReached = true;
             break;
         }
-        text += currentLine;
+        text += currentLine + " ";
     }
     document.text() = tokenizer_->tokenize(text);
 

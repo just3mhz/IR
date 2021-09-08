@@ -3,6 +3,7 @@
 #include <iostream>
 #include <unordered_map>
 #include <mutex>
+#include <vector>
 
 namespace auxiliary {
 
@@ -17,6 +18,7 @@ public:
     SingletonDictionary(SingletonDictionary&&) = delete;
 
     bool hasTerm(const std::string&) const;
+    const std::string& getTerm(const uint64_t termId) const;
     uint64_t getTermId(const std::string&);
 
     void dump(const std::string& path) const;
@@ -27,7 +29,8 @@ protected:
     SingletonDictionary() = default;
 private:
     mutable std::mutex mutex_;
-    std::unordered_map<std::string, uint64_t> dict_;
+    std::unordered_map<std::string_view, uint64_t> stringToId_;
+    std::vector<std::string> idToString_;
 };
 
 }

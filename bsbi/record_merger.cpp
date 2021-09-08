@@ -1,5 +1,7 @@
 #include "record_merger.h"
 
+#include "../auxiliary/dictionary.h"
+
 #include <iostream>
 #include <fstream>
 #include <set>
@@ -57,7 +59,11 @@ void RecordMerger::merge(const std::vector<std::string>& paths)
             continue;
         }
 
-        ifs << "{ " << currentPosting.termId << " : [";
+        ifs << "{ ("
+            << currentPosting.termId
+            << ", '"
+            << auxiliary::SingletonDictionary::getInstance().getTerm(currentPosting.termId)
+            << "') : [";
         std::sort(currentPosting.docIds.begin(), currentPosting.docIds.end());
         for(int i = 0; i < currentPosting.docIds.size(); ++i) {
             if (i != 0)
