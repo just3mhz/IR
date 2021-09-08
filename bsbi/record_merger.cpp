@@ -1,22 +1,13 @@
 #include "record_merger.h"
 
-#include "../auxiliary/dictionary.h"
+#include "posting.h"
 
-#include <iostream>
 #include <fstream>
 #include <set>
+#include <optional>
 
 namespace bsbi {
 
-namespace {
-
-struct Posting {
-    uint64_t termId;
-    std::vector<uint64_t> docIds;
-    std::vector<uint64_t> counts;
-};
-
-}
 
 void RecordMerger::merge(const std::vector<std::string>& paths)
 {
@@ -35,8 +26,8 @@ void RecordMerger::merge(const std::vector<std::string>& paths)
         }
     }
 
-    std::ofstream ifs("output.txt");
-    Posting currentPosting{};
+    std::ofstream ofs("output.txt");
+    std::optional<Posting> currentPosting;
     while ( !pq.empty() ) {
         const auto item = *pq.begin();
         pq.erase(*pq.begin());
@@ -49,38 +40,19 @@ void RecordMerger::merge(const std::vector<std::string>& paths)
             pq.emplace(nextRecord, streamId);
         }
 
-        if (currentPosting.termId == record.termId) {
-            if (!currentPosting.docIds.empty() && currentPosting.docIds.back() == record.docId) {
-                currentPosting.counts.back() += 1;
-            } else {
-                currentPosting.docIds.push_back(record.docId);
-                currentPosting.counts.push_back(1);
-            }
+        if (currentPosting && currentPosting->termId() == record.termId) {
+            currentPosting->pushDocId(record.docId);
             continue;
         }
 
-        ifs << "{ ("
-            << currentPosting.termId
-            << ", '"
-            << auxiliary::SingletonDictionary::getInstance().getTerm(currentPosting.termId)
-            << "') : [";
-        std::sort(currentPosting.docIds.begin(), currentPosting.docIds.end());
-        for(int i = 0; i < currentPosting.docIds.size(); ++i) {
-            if (i != 0)
-                ifs << ", ";
-            ifs << "(" << currentPosting.docIds[i] << ", " << currentPosting.counts[i] << ")";
-        }
-        ifs << "] }\n";
+        if (currentPosting)
+            currentPosting->printPosting(ofs);
 
-        currentPosting.termId = record.termId;
-        currentPosting.docIds.clear();
-        currentPosting.counts.clear();
-
-        currentPosting.docIds.push_back(record.docId);
-        currentPosting.counts.push_back(1);
+        currentPosting = Posting(record.termId);
+        currentPosting->pushDocId(record.docId);
     }
 
-    ifs.close();
+    ofs.close();
 }
 
 }
