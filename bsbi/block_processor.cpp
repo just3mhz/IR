@@ -3,6 +3,7 @@
 #include "../auxiliary/dictionary.h"
 
 #include <future>
+#include <cassert>
 
 namespace bsbi {
 

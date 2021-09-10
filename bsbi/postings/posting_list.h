@@ -1,11 +1,22 @@
-//
-// Created by just3mhz on 11.09.2021.
-//
+#pragma once
 
-#ifndef IR_POSTING_LIST_H
-#define IR_POSTING_LIST_H
+#include "posting.h"
+#include "../../common/serialization/serialize.h"
 
-class PostingList {
+#include <vector>
+
+namespace bsbi::postings {
+
+class PostingList final : common::serialization::Serializable {
+public:
+    std::size_t serialize(std::ostream& os) const override;
+    std::size_t deserialize(std::istream& is) override;
+    std::size_t serialized_size() const noexcept override;
+private:
+    uint64_t termId_;
+    std::vector<Posting> postings_;
 };
 
-#endif //IR_POSTING_LIST_H
+} // namespace bsbi::postings
+
+

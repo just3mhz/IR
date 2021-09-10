@@ -1,6 +1,6 @@
 #include "record_merger.h"
 
-#include "posting.h"
+#include "postings/posting.h"
 
 #include <fstream>
 #include <set>

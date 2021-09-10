@@ -1,37 +1,48 @@
-#include "postings/posting.h"
+#include "posting.h"
 
-#include "../auxiliary/dictionary.h"
+#include "../../auxiliary/dictionary.h"
 
-namespace bsbi {
+namespace bsbi::postings {
 
-Posting::Posting(const uint64_t termId) : termId_(termId)
+uint64_t& Posting::docId()
 {
+    return docId_;
 }
 
-void Posting::pushDocId(const uint64_t docId)
+const uint64_t& Posting::docId() const
 {
-    docIds_[docId].count += 1;
+    return docId_;
 }
 
-void Posting::printPosting(std::ostream& os)
+uint64_t& Posting::count()
 {
-    const auto& dict = auxiliary::SingletonDictionary::getInstance();
-
-    os << "{ (" << termId_ << ", '" << dict.getTerm(termId_) << "') : [";
-
-    bool first = true;
-    for(const auto& [docId, meta]: docIds_) {
-        if (!first)
-            os << ", ";
-        first = false;
-        os << "(" << docId << ", " << meta.count << ")";
-    }
-    os << "] }\n";
+    return count_;
 }
 
-uint64_t Posting::termId() const
+const uint64_t& Posting::count() const
 {
-    return termId_;
+    return count_;
+}
+
+std::size_t Posting::serialize(std::ostream& os) const
+{
+    const auto pos = os.tellp();
+    common::serialization::write(os, docId_);
+    common::serialization::write(os, count_);
+    return static_cast<std::size_t>(os.tellp() - pos);
+}
+
+std::size_t Posting::deserialize(std::istream& is)
+{
+    const auto pos = is.tellg();
+    common::serialization::read(is, docId_);
+    common::serialization::read(is, count_);
+    return static_cast<std::size_t>(is.tellg() - pos);
+}
+
+std::size_t Posting::serialized_size() const noexcept
+{
+    return sizeof(docId_) + sizeof(count_);
 }
 
 }
