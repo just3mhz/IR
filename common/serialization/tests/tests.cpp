@@ -14,7 +14,7 @@ public:
         , intValue(i)
     {}
 
-    auto serialize(std::ostream& os) const -> std::size_t override {
+    std::size_t serialize(std::ostream& os) const override {
         std::size_t bytes = 0;
         bytes += common::serialization::write(os, boolValue);
         bytes += common::serialization::write(os, stringValue);
@@ -22,7 +22,7 @@ public:
         return bytes;
     }
 
-    auto deserialize(std::istream& is) -> std::size_t override {
+    std::size_t deserialize(std::istream& is) override {
         std::size_t bytes = 0;
         bytes += common::serialization::read(is, boolValue);
         bytes += common::serialization::read(is, stringValue);
@@ -30,7 +30,7 @@ public:
         return bytes;
     }
 
-    auto serialized_size() const noexcept -> std::size_t override {
+    std::size_t serialized_size() const noexcept override {
         const auto len = static_cast<uint32_t>(stringValue.size());
         return sizeof(boolValue) + sizeof(intValue) + (sizeof(len) + len);
     }
@@ -45,7 +45,7 @@ private:
     int intValue{-1};
 };
 
-}
+} // namespace
 
 
 TEST(TestIntegralTypes, TestInt)
@@ -110,6 +110,7 @@ TEST(TestSpecialTypes, TestSerializable)
     std::size_t bytes1 = common::serialization::write(s, obj1);
     std::size_t bytes2 = common::serialization::read(s, obj2);
 
+    ASSERT_EQ(bytes1, obj1.serialized_size());
     ASSERT_EQ(bytes1, bytes2);
     ASSERT_EQ(obj1, obj2);
 }
