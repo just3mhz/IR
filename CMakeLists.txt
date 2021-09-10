@@ -24,7 +24,24 @@ add_executable(IR
         tokenization/tokenization.h
         auxiliary/dictionary.cpp
         auxiliary/dictionary.h
-        bsbi/bsbi.h bsbi/record.h bsbi/record.cpp bsbi/bsbi.cpp bsbi/block_processor.cpp bsbi/block_processor.h bsbi/record_merger.cpp bsbi/record_merger.h bsbi/posting.cpp bsbi/posting.h common/serialization/serialize.h common/serialization/tests/tests.cpp)
+        bsbi/bsbi.h
+        bsbi/record.h
+        bsbi/record.cpp
+        bsbi/bsbi.cpp
+        bsbi/block_processor.cpp
+        bsbi/block_processor.h
+        bsbi/record_merger.cpp
+        bsbi/record_merger.h
+        bsbi/postings/posting.cpp
+        bsbi/postings/posting.h
+        bsbi/postings/posting_list.cpp
+        bsbi/postings/posting_list.h
+        bsbi/postings/posting_list_builder.cpp
+        bsbi/postings/posting_list_builder.h
+        common/serialization/serialize.h
+        common/serialization/serializable.h
+        common/serialization/stream_writer.h
+        common/serialization/stream_reader.h)
 
 add_executable(IR_tests
         test.cpp
@@ -46,9 +63,16 @@ add_executable(IR_tests
         bsbi/block_processor.h
         bsbi/record_merger.cpp
         bsbi/record_merger.h
-        bsbi/posting.cpp
-        bsbi/posting.h
+        bsbi/postings/posting.cpp
+        bsbi/postings/posting.h
+        bsbi/postings/posting_list.cpp
+        bsbi/postings/posting_list.h
+        bsbi/postings/posting_list_builder.cpp
+        bsbi/postings/posting_list_builder.h
         common/serialization/serialize.h
+        common/serialization/serializable.h
+        common/serialization/stream_writer.h
+        common/serialization/stream_reader.h
         common/serialization/tests/tests.cpp)
 
 target_link_libraries(IR_tests gtest gtest_main)

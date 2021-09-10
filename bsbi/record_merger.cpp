@@ -1,6 +1,6 @@
 #include "record_merger.h"
 
-#include "posting.h"
+#include "postings/posting_list_builder.h"
 
 #include <fstream>
 #include <set>
@@ -27,7 +27,7 @@ void RecordMerger::merge(const std::vector<std::string>& paths)
     }
 
     std::ofstream ofs("output.txt");
-    std::optional<Posting> currentPosting;
+    std::optional<postings::PostingListBuilder> builder;
     while ( !pq.empty() ) {
         const auto item = *pq.begin();
         pq.erase(*pq.begin());
@@ -40,16 +40,16 @@ void RecordMerger::merge(const std::vector<std::string>& paths)
             pq.emplace(nextRecord, streamId);
         }
 
-        if (currentPosting && currentPosting->termId() == record.termId) {
-            currentPosting->pushDocId(record.docId);
+        if (builder && builder->termId() == record.termId) {
+            builder->processRecord(record);
             continue;
         }
 
-        if (currentPosting)
-            currentPosting->printPosting(ofs);
+        if (builder)
+            ofs << builder->createPostingList() << '\n';
 
-        currentPosting = Posting(record.termId);
-        currentPosting->pushDocId(record.docId);
+        builder = postings::PostingListBuilder(record.termId);
+        builder->processRecord(record);
     }
 
     ofs.close();

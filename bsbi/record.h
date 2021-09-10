@@ -21,6 +21,8 @@ struct Record
     }
 };
 
+std::ostream& operator<<(std::ostream& os, const Record& record);
+
 class RecordDumper {
 public:
     virtual void dump(const std::string&, const std::vector<Record>&) = 0;

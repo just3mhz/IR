@@ -5,6 +5,12 @@
 
 namespace bsbi {
 
+std::ostream& operator<<(std::ostream& os, const Record& record)
+{
+    os << "(terId=" << record.termId << ", docId=" << record.docId << ")";
+    return os;
+}
+
 void RecordDumperTxt::dump(const std::string& filepath, const std::vector<Record>& records)
 {
     std::ofstream ofs(filepath);

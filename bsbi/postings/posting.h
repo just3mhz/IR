@@ -1,27 +1,33 @@
 #pragma once
 
+#include "../../common/serialization/serialize.h"
+
 #include <iostream>
 #include <map>
 
-namespace bsbi {
+namespace bsbi::postings {
 
-class Posting {
+class Posting final : public common::serialization::Serializable {
 public:
-    struct MetaInf {
-        uint64_t count{0};
-    };
+    Posting() = default;
+    explicit Posting(uint64_t docId);
 
-    explicit Posting(uint64_t termId);
+    uint64_t& docId();
+    const uint64_t& docId() const;
 
-    void pushDocId(uint64_t docId);
-    void printPosting(std::ostream& os);
+    uint64_t& count();
+    const uint64_t& count() const;
 
-    uint64_t termId() const;
-
+    std::size_t serialize(std::ostream& os) const override;
+    std::size_t deserialize(std::istream& is) override;
+    std::size_t serialized_size() const noexcept override;
 private:
-    uint64_t termId_;
-    std::map<uint64_t, MetaInf> docIds_;
+    uint64_t docId_;
+    uint64_t count_;
+
+    friend class PostingListBuilder;
 };
 
+std::ostream& operator<<(std::ostream& os, const Posting& posting);
 
-}
+} // namespace bsbi::postings
