@@ -28,7 +28,6 @@ public:
 protected:
     SingletonDictionary() = default;
 private:
-    mutable std::mutex mutex_;
     std::unordered_map<std::string_view, uint64_t> stringToId_;
     std::vector<std::string> idToString_;
 };

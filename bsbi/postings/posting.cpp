@@ -1,4 +1,4 @@
-#include "posting.h"
+#include "postings/posting.h"
 
 #include "../auxiliary/dictionary.h"
 
