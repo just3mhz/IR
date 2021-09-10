@@ -107,8 +107,8 @@ TEST(TestSpecialTypes, TestSerializable)
 
     SerializableClass obj1(false, "Test", 128);
     SerializableClass obj2;
-    std::size_t bytes1 = common::serialization::write<common::serialization::Serializable>(s, obj1);
-    std::size_t bytes2 = common::serialization::read<common::serialization::Serializable>(s, obj2);
+    std::size_t bytes1 = common::serialization::write(s, obj1);
+    std::size_t bytes2 = common::serialization::read(s, obj2);
 
     ASSERT_EQ(bytes1, bytes2);
     ASSERT_EQ(obj1, obj2);
