@@ -30,7 +30,7 @@ public:
         return bytes;
     }
 
-    std::size_t serialized_size() const noexcept override {
+    std::size_t serializedSize() const noexcept override {
         const auto len = static_cast<uint32_t>(stringValue.size());
         return sizeof(boolValue) + sizeof(intValue) + (sizeof(len) + len);
     }
@@ -110,7 +110,7 @@ TEST(TestSpecialTypes, TestSerializable)
     std::size_t bytes1 = common::serialization::write(s, obj1);
     std::size_t bytes2 = common::serialization::read(s, obj2);
 
-    ASSERT_EQ(bytes1, obj1.serialized_size());
+    ASSERT_EQ(bytes1, obj1.serializedSize());
     ASSERT_EQ(bytes1, bytes2);
     ASSERT_EQ(obj1, obj2);
 }

@@ -20,7 +20,7 @@ public:
 
     std::size_t serialize(std::ostream& os) const override;
     std::size_t deserialize(std::istream& is) override;
-    std::size_t serialized_size() const noexcept override;
+    std::size_t serializedSize() const noexcept override;
 private:
     uint64_t docId_;
     uint64_t count_;

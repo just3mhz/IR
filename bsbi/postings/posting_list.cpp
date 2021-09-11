@@ -35,12 +35,12 @@ std::size_t PostingList::deserialize(std::istream& is)
     return static_cast<std::size_t>(is.tellg() - pos);
 }
 
-std::size_t PostingList::serialized_size() const noexcept
+std::size_t PostingList::serializedSize() const noexcept
 {
     std::size_t bytes = sizeof(termId_);
     bytes += sizeof(postings_.size());
     for (const auto& posting: postings_) {
-        bytes += posting.serialized_size();
+        bytes += posting.serializedSize();
     }
     return bytes;
 }

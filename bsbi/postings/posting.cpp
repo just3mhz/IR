@@ -46,7 +46,7 @@ std::size_t Posting::deserialize(std::istream& is)
     return static_cast<std::size_t>(is.tellg() - pos);
 }
 
-std::size_t Posting::serialized_size() const noexcept
+std::size_t Posting::serializedSize() const noexcept
 {
     return sizeof(docId_) + sizeof(count_);
 }
