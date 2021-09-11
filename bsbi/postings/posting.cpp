@@ -4,11 +4,11 @@
 
 namespace bsbi::postings {
 
+
 Posting::Posting(uint64_t docId)
     : docId_(docId)
     , count_(1)
-{
-}
+{}
 
 uint64_t& Posting::docId()
 {
@@ -57,4 +57,4 @@ std::ostream& operator<<(std::ostream& os, const Posting& posting)
     return os;
 }
 
-}
+} // namespace bsbi::postings

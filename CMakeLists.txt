@@ -75,5 +75,6 @@ add_executable(IR_tests
         common/serialization/stream_reader.h
         common/serialization/tests/tests.cpp)
 
+
 target_link_libraries(IR_tests gtest gtest_main)
 add_test(NAME IR_tests COMMAND IR_tests)
