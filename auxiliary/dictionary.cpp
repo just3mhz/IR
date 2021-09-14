@@ -1,7 +1,6 @@
 #include "dictionary.h"
 
 #include <fstream>
-#include <vector>
 #include <algorithm>
 #include <cassert>
 

@@ -22,6 +22,8 @@ add_executable(IR
         document/document_reader.h
         tokenization/tokenization.cpp
         tokenization/tokenization.h
+        tokenization/filter.cpp
+        tokenization/filter.h
         auxiliary/dictionary.cpp
         auxiliary/dictionary.h
         bsbi/bsbi.h
@@ -38,6 +40,8 @@ add_executable(IR
         bsbi/postings/posting_list.h
         bsbi/postings/posting_list_builder.cpp
         bsbi/postings/posting_list_builder.h
+        boolean_queries/boolean_query.cpp
+        boolean_queries/boolean_query.h
         common/serialization/serialize.h
         common/serialization/serializable.h
         common/serialization/stream_writer.h
@@ -51,6 +55,8 @@ add_executable(IR_tests
         document/document_reader.h
         tokenization/tokenization.cpp
         tokenization/tokenization.h
+        tokenization/filter.cpp
+        tokenization/filter.h
         auxiliary/dictionary.cpp
         auxiliary/dictionary.h
         auxiliary/tests/test_dictionary.cpp
@@ -69,6 +75,8 @@ add_executable(IR_tests
         bsbi/postings/posting_list.h
         bsbi/postings/posting_list_builder.cpp
         bsbi/postings/posting_list_builder.h
+        boolean_queries/boolean_query.cpp
+        boolean_queries/boolean_query.h
         common/serialization/serialize.h
         common/serialization/serializable.h
         common/serialization/stream_writer.h
