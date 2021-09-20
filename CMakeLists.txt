@@ -45,7 +45,8 @@ add_executable(IR
         common/serialization/serialize.h
         common/serialization/serializable.h
         common/serialization/stream_writer.h
-        common/serialization/stream_reader.h)
+        common/serialization/stream_reader.h
+        search_engine/search_engine.h)
 
 add_executable(IR_tests
         test.cpp
@@ -81,7 +82,8 @@ add_executable(IR_tests
         common/serialization/serializable.h
         common/serialization/stream_writer.h
         common/serialization/stream_reader.h
-        common/serialization/tests/tests.cpp)
+        common/serialization/tests/tests.cpp
+        search_engine/search_engine.h)
 
 
 target_link_libraries(IR_tests gtest gtest_main)
