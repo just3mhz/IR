@@ -57,13 +57,13 @@ std::vector<std::shared_ptr<Token>> reversePolishNotation(const std::vector<std:
         switch (token->tokenType()) {
         case TERM:
             outputTokens.push_back(token);
-            break;
+            continue;
         case OPERATOR:
             processOperator(token, outputTokens, operators);
-            break;
+            continue;
         case BRACKET:
             processBracket(token, outputTokens, operators);
-            break;
+            continue;
         }
         throw std::runtime_error("Unknown TokenType");
     }
