@@ -45,7 +45,7 @@ add_executable(IR
         common/serialization/serialize.h
         common/serialization/serializable.h
         common/serialization/stream_writer.h
-        common/serialization/stream_reader.h boolean_queries/boolean_query.h boolean_queries/boolean_query.cpp boolean_queries/token.cpp boolean_queries/token.h boolean_queries/parser.h)
+        common/serialization/stream_reader.h boolean_queries/boolean_query.h boolean_queries/boolean_query.cpp boolean_queries/token.cpp boolean_queries/token.h boolean_queries/parser.h boolean_queries/parser.cpp)
 
 add_executable(IR_tests
         test.cpp
@@ -81,7 +81,7 @@ add_executable(IR_tests
         common/serialization/serializable.h
         common/serialization/stream_writer.h
         common/serialization/stream_reader.h
-        common/serialization/tests/tests.cpp boolean_queries/boolean_query.h boolean_queries/token.cpp boolean_queries/token.h boolean_queries/parser.h)
+        common/serialization/tests/tests.cpp boolean_queries/boolean_query.h boolean_queries/token.cpp boolean_queries/token.h boolean_queries/parser.h boolean_queries/parser.cpp)
 
 
 target_link_libraries(IR_tests gtest gtest_main)
