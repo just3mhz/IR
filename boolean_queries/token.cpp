@@ -46,9 +46,14 @@ TokenType Operator::tokenType() const
     return TokenType::OPERATOR;
 }
 
-int Operator::priority() const
+int OperatorAND::priority() const
 {
-    return 0;
+    return HIGH_PRIORITY;
+}
+
+int OperatorOR::priority() const
+{
+    return LOW_PRIORITY;
 }
 
 }

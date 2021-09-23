@@ -38,19 +38,35 @@ public:
 
     explicit Bracket(Type bracketType);
 
-    TokenType tokenType() const override;
-
     bool isOpen() const;
     bool isClose() const;
+
+    // Token
+    TokenType tokenType() const override;
 private:
     Type type_;
 };
 
 class Operator: public Token {
 public:
+    virtual int priority() const = 0;
+
+    // Token
     TokenType tokenType() const override;
 
-    int priority() const;
+protected:
+    constexpr static int LOW_PRIORITY = 0;
+    constexpr static int HIGH_PRIORITY = 1;
+};
+
+class OperatorAND final: public Operator {
+public:
+    int priority() const override;
+};
+
+class OperatorOR final: public Operator {
+public:
+    int priority() const override;
 };
 
 }
