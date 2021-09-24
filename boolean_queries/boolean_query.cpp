@@ -1,22 +1,41 @@
 #include "boolean_query.h"
 
-namespace boolean_query {
+namespace boolean_queries {
 
-using bsbi::postings::Posting;
-
-std::vector<uint64_t> intersect(const std::vector<Posting>& lhs, const std::vector<Posting>& rhs)
+std::vector<uint64_t> sortedIntersect(const std::vector<uint64_t>& lhs, const std::vector<uint64_t>& rhs)
 {
     std::vector<uint64_t> result;
     std::size_t i = 0;
     std::size_t j = 0;
     while (i < lhs.size() && j < rhs.size()) {
-        if (lhs[i].docId() == rhs[j].docId()) {
-            result.push_back(lhs[i].docId());
+        if (lhs[i] == rhs[j]) {
+            result.push_back(lhs[i]);
             ++i;
             ++j;
-        } else if (lhs[i].docId() < rhs[i].docId()) {
+        } else if (lhs[i] < rhs[i]) {
             ++i;
-        } else if (lhs[i].docId() > rhs[i].docId()) {
+        } else if (lhs[i] > rhs[i]) {
+            ++j;
+        }
+    }
+    return result;
+}
+
+std::vector<uint64_t> sortedJoin(const std::vector<uint64_t>& lhs, const std::vector<uint64_t>& rhs)
+{
+    std::vector<uint64_t> result;
+    std::size_t i = 0;
+    std::size_t j = 0;
+    while (i < lhs.size() && j < rhs.size()) {
+        if (lhs[i] < rhs[j]) {
+            result.push_back(lhs[i]);
+            ++i;
+        } else if (lhs[i] > rhs[j]) {
+            result.push_back(rhs[j]);
+            ++j;
+        } else {
+            result.push_back(lhs[i]);
+            ++i;
             ++j;
         }
     }

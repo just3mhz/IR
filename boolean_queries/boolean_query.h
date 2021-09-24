@@ -4,10 +4,14 @@
 
 #include <vector>
 
-namespace boolean_query {
+namespace boolean_queries {
 
-std::vector<uint64_t> intersect(
-    const std::vector<bsbi::postings::Posting>&,
-    const std::vector<bsbi::postings::Posting>&);
+std::vector<uint64_t> sortedIntersect(
+    const std::vector<uint64_t>&,
+    const std::vector<uint64_t>&);
+
+std::vector<uint64_t> sortedJoin(
+    const std::vector<uint64_t>&,
+    const std::vector<uint64_t>&);
 
 } // namespace boolean_query
