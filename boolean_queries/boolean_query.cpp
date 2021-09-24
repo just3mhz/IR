@@ -12,9 +12,9 @@ std::vector<uint64_t> sortedIntersect(const std::vector<uint64_t>& lhs, const st
             result.push_back(lhs[i]);
             ++i;
             ++j;
-        } else if (lhs[i] < rhs[i]) {
+        } else if (lhs[i] < rhs[j]) {
             ++i;
-        } else if (lhs[i] > rhs[i]) {
+        } else if (lhs[i] > rhs[j]) {
             ++j;
         }
     }
@@ -39,6 +39,15 @@ std::vector<uint64_t> sortedJoin(const std::vector<uint64_t>& lhs, const std::ve
             ++j;
         }
     }
+
+    for(; i < lhs.size(); ++i) {
+        result.push_back(lhs[i]);
+    }
+
+    for(; j < rhs.size(); ++j) {
+        result.push_back(rhs[j]);
+    }
+
     return result;
 }
 

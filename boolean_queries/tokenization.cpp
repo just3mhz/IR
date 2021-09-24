@@ -32,9 +32,6 @@ std::string extractTerm(std::size_t i, const std::string& rawExpression) {
 std::vector<std::shared_ptr<Token>> tokenizeExpression(const std::string& rawExpression)
 {
     std::vector<std::shared_ptr<Token>> tokens;
-
-    auto& dict = auxiliary::SingletonDictionary::getInstance();
-
     std::size_t i = 0;
     while(i < rawExpression.size()) {
         if (rawExpression[i] == ' ') {
@@ -42,7 +39,7 @@ std::vector<std::shared_ptr<Token>> tokenizeExpression(const std::string& rawExp
         } else if (std::isalpha(rawExpression[i])) {
             auto term = extractTerm(i, rawExpression);
             i += term.size();
-            tokens.push_back(std::make_shared<Term>(dict.getTermId(term), term));
+            tokens.push_back(std::make_shared<Term>(0, term));
         } else if (isAND(i, rawExpression)) {
             i += 2;
             tokens.push_back(std::make_shared<OperatorAND>());
