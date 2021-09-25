@@ -1,4 +1,4 @@
-#include "boolean_query.h"
+#include "set_operations.h"
 
 namespace boolean_queries {
 

@@ -7,7 +7,7 @@ class MockInvertedIndexProvider: public InvertedIndexProvider {
         if (term == "abc") {
             return {1, 3, 6, 8, 9};
         } else if (term == "cd") {
-            return {6, 8};
+            return {1, 5, 8};
         } else {
             return {1, 3, 6};
         }

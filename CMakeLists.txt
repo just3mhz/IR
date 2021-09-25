@@ -40,12 +40,12 @@ add_executable(IR
         bsbi/postings/posting_list.h
         bsbi/postings/posting_list_builder.cpp
         bsbi/postings/posting_list_builder.h
-        boolean_queries/boolean_query.cpp
-        boolean_queries/boolean_query.h
+        boolean_queries/set_operations.cpp
+        boolean_queries/set_operations.h
         common/serialization/serialize.h
         common/serialization/serializable.h
         common/serialization/stream_writer.h
-        common/serialization/stream_reader.h boolean_queries/boolean_query.h boolean_queries/boolean_query.cpp boolean_queries/token.cpp boolean_queries/token.h boolean_queries/parser.h boolean_queries/parser.cpp boolean_queries/tokenization.cpp boolean_queries/tokenization.h boolean_queries/expression_tree.cpp boolean_queries/expression_tree.h common/utils.cpp common/utils.h)
+        common/serialization/stream_reader.h boolean_queries/set_operations.h boolean_queries/set_operations.cpp boolean_queries/token.cpp boolean_queries/token.h boolean_queries/parser.h boolean_queries/parser.cpp boolean_queries/tokenization.cpp boolean_queries/tokenization.h boolean_queries/expression_tree.cpp boolean_queries/expression_tree.h common/utils.cpp common/utils.h)
 
 add_executable(IR_tests
         test.cpp
@@ -75,14 +75,14 @@ add_executable(IR_tests
         bsbi/postings/posting_list.h
         bsbi/postings/posting_list_builder.cpp
         bsbi/postings/posting_list_builder.h
-        boolean_queries/boolean_query.cpp
-        boolean_queries/boolean_query.h
+        boolean_queries/set_operations.cpp
+        boolean_queries/set_operations.h
         common/serialization/serialize.h
         common/serialization/serializable.h
         common/serialization/stream_writer.h
         common/serialization/stream_reader.h
         common/serialization/tests/tests.cpp
-        boolean_queries/boolean_query.h
+        boolean_queries/set_operations.h
         boolean_queries/token.cpp
         boolean_queries/token.h
         boolean_queries/parser.h

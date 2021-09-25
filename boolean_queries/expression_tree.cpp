@@ -1,7 +1,7 @@
 #include "expression_tree.h"
 
-#include "boolean_query.h"
 #include "../common/utils.h"
+#include "set_operations.h"
 
 namespace boolean_queries {
 

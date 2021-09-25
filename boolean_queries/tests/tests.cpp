@@ -1,4 +1,4 @@
-#include "../boolean_query.h"
+#include "../set_operations.h"
 #include "../tokenization.h"
 
 #include "gtest/gtest.h"
