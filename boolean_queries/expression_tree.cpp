@@ -14,7 +14,7 @@ public:
         common::throwIf(operator_ == nullptr, "Can't downcast Token to Operator");
     }
 
-    std::vector<uint64_t> evaluate(const InvertedIndexProvider& invertedIndexProvider) const override {
+    std::vector<uint64_t> evaluate(const bsbi::InvIndexProvider& invertedIndexProvider) const override {
         std::vector<uint64_t> resultLeft = left_->evaluate(invertedIndexProvider);
         std::vector<uint64_t> resultRight = right_->evaluate(invertedIndexProvider);
 
@@ -56,7 +56,7 @@ public:
         common::throwIf(term_ == nullptr, "Can't downcast Token to Term");
     }
 
-    std::vector<uint64_t> evaluate(const InvertedIndexProvider& invertedIndexProvider) const override {
+    std::vector<uint64_t> evaluate(const bsbi::InvIndexProvider& invertedIndexProvider) const override {
         return invertedIndexProvider.getDocIds(term_->term());
     }
 
@@ -126,7 +126,7 @@ ExpressionTree::ExpressionTree(const std::vector<std::shared_ptr<Token>>& tokens
     root_ = builder.constructTree();
 }
 
-std::vector<uint64_t> ExpressionTree::evaluate(const InvertedIndexProvider& invertedIndexProvider) const
+std::vector<uint64_t> ExpressionTree::evaluate(const bsbi::InvIndexProvider& invertedIndexProvider) const
 {
     return root_->evaluate(invertedIndexProvider);
 }

@@ -45,7 +45,22 @@ add_executable(IR
         common/serialization/serialize.h
         common/serialization/serializable.h
         common/serialization/stream_writer.h
-        common/serialization/stream_reader.h boolean_queries/set_operations.h boolean_queries/set_operations.cpp boolean_queries/token.cpp boolean_queries/token.h boolean_queries/parser.h boolean_queries/parser.cpp boolean_queries/tokenization.cpp boolean_queries/tokenization.h boolean_queries/expression_tree.cpp boolean_queries/expression_tree.h common/utils.cpp common/utils.h)
+        common/serialization/stream_reader.h
+        boolean_queries/set_operations.h
+        boolean_queries/set_operations.cpp
+        boolean_queries/token.cpp
+        boolean_queries/token.h
+        boolean_queries/parser.h
+        boolean_queries/parser.cpp
+        boolean_queries/tokenization.cpp
+        boolean_queries/tokenization.h
+        boolean_queries/expression_tree.cpp
+        boolean_queries/expression_tree.h
+        common/utils.cpp common/utils.h
+        search_engine/search_engine.cpp
+        search_engine/search_engine.h
+        bsbi/inv_index_provider.cpp
+        bsbi/inv_index_provider.h)
 
 add_executable(IR_tests
         test.cpp
@@ -91,7 +106,9 @@ add_executable(IR_tests
         boolean_queries/tokenization.h
         boolean_queries/tests/tests.cpp
         common/utils.cpp
-        common/utils.h)
+        common/utils.h
+        search_engine/search_engine.cpp
+        search_engine/search_engine.h)
 
 
 target_link_libraries(IR_tests gtest gtest_main)
