@@ -2,15 +2,9 @@
 
 namespace boolean_queries {
 
-Term::Term(uint64_t termId, std::string term)
-    : termId_(termId)
-    , term_(std::move(term))
+Term::Term(std::string term)
+    : term_(std::move(term))
 { }
-
-uint64_t Term::termId() const
-{
-    return termId_;
-}
 
 const std::string& Term::term() const
 {
@@ -41,29 +35,30 @@ TokenType Bracket::tokenType() const
     return TokenType::BRACKET;
 }
 
+Operator::Operator(Operator::Type operatorType)
+    : type_(operatorType)
+{
+}
+
 TokenType Operator::tokenType() const
 {
     return TokenType::OPERATOR;
 }
 
-Operator::Type OperatorAND::operatorType() const
+Operator::Type Operator::operatorType() const
 {
-    return Operator::Type::AND;
+    return type_;
 }
 
-int OperatorAND::priority() const
+int Operator::priority() const
 {
-    return HIGH_PRIORITY;
-}
-
-Operator::Type OperatorOR::operatorType() const
-{
-    return Operator::Type::OR;
-}
-
-int OperatorOR::priority() const
-{
-    return LOW_PRIORITY;
+    switch (type_) {
+    case AND:
+        return HIGH_PRIORITY;
+    case OR:
+        return LOW_PRIORITY;
+    }
+    throw std::runtime_error("Unknown operator type");
 }
 
 std::ostream& operator<<(std::ostream& os, const Token& token)
@@ -96,21 +91,11 @@ std::ostream& operator<<(std::ostream& os, const Operator& token)
 {
     switch (token.operatorType()) {
     case Operator::Type::AND:
-        return os << dynamic_cast<const OperatorAND&>(token);
+        return os << "&&";
     case Operator::Type::OR:
-        return os << dynamic_cast<const OperatorOR&>(token);
+        return os << "||";
     }
     throw std::runtime_error("Unknown Operator::Type");
-}
-
-std::ostream& operator<<(std::ostream& os, const OperatorAND& token)
-{
-    return os << "&&";
-}
-
-std::ostream& operator<<(std::ostream& os, const OperatorOR& token)
-{
-    return os << "||";
 }
 
 }

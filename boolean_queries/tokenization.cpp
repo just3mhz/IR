@@ -39,13 +39,13 @@ std::vector<std::shared_ptr<Token>> tokenizeExpression(const std::string& rawExp
         } else if (std::isalpha(rawExpression[i])) {
             auto term = extractTerm(i, rawExpression);
             i += term.size();
-            tokens.push_back(std::make_shared<Term>(0, term));
+            tokens.push_back(std::make_shared<Term>(term));
         } else if (isAND(i, rawExpression)) {
             i += 2;
-            tokens.push_back(std::make_shared<OperatorAND>());
+            tokens.push_back(std::make_shared<Operator>(Operator::Type::AND));
         } else if (isOR(i, rawExpression)) {
             i += 2;
-            tokens.push_back(std::make_shared<OperatorOR>());
+            tokens.push_back(std::make_shared<Operator>(Operator::Type::OR));
         } else if (rawExpression[i] == '(') {
             i++;
             tokens.push_back(std::make_shared<Bracket>(Bracket::Type::OPEN));

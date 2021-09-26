@@ -17,15 +17,12 @@ public:
 
 class Term final: public Token {
 public:
-    Term(uint64_t termId, std::string term);
-
-    uint64_t termId() const;
+    explicit Term(std::string term);
     const std::string& term() const;
 
     // Token
     TokenType tokenType() const override;
 private:
-    uint64_t termId_;
     std::string term_;
 };
 
@@ -54,34 +51,22 @@ public:
         OR
     };
 
-    virtual Type operatorType() const = 0;
-    virtual int priority() const = 0;
+    explicit Operator(Type operatorType);
+
+    Type operatorType() const;
+    int priority() const;
 
     // Token
     TokenType tokenType() const override;
-
-protected:
+private:
     constexpr static int LOW_PRIORITY = 0;
     constexpr static int HIGH_PRIORITY = 1;
-};
-
-class OperatorAND final: public Operator {
-public:
-    Type operatorType() const override;
-    int priority() const override;
-};
-
-class OperatorOR final: public Operator {
-public:
-    Type operatorType() const override;
-    int priority() const override;
+    Type type_;
 };
 
 std::ostream& operator<<(std::ostream& os, const Token& token);
 std::ostream& operator<<(std::ostream& os, const Term& token);
 std::ostream& operator<<(std::ostream& os, const Bracket& token);
 std::ostream& operator<<(std::ostream& os, const Operator& token);
-std::ostream& operator<<(std::ostream& os, const OperatorAND& token);
-std::ostream& operator<<(std::ostream& os, const OperatorOR& token);
 
 }

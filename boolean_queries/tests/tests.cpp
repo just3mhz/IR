@@ -62,12 +62,12 @@ TEST(TestParsing, TestTokenization)
 {
     const std::string rawExpression = "abc && (cd || e)";
     const std::vector<std::shared_ptr<Token>> expected = {
-        std::make_shared<Term>(0, "abc"),
-        std::make_shared<OperatorAND>(),
+        std::make_shared<Term>("abc"),
+        std::make_shared<Operator>(Operator::Type::AND),
         std::make_shared<Bracket>(Bracket::Type::OPEN),
-        std::make_shared<Term>(1, "cd"),
-        std::make_shared<OperatorOR>(),
-        std::make_shared<Term>(2, "e"),
+        std::make_shared<Term>("cd"),
+        std::make_shared<Operator>(Operator::Type::OR),
+        std::make_shared<Term>("e"),
         std::make_shared<Bracket>(Bracket::Type::CLOSE),
     };
 

@@ -34,6 +34,8 @@ add_executable(IR
         bsbi/block_processor.h
         bsbi/record_merger.cpp
         bsbi/record_merger.h
+        bsbi/inv_index_provider.cpp
+        bsbi/inv_index_provider.h
         bsbi/postings/posting.cpp
         bsbi/postings/posting.h
         bsbi/postings/posting_list.cpp
@@ -56,11 +58,10 @@ add_executable(IR
         boolean_queries/tokenization.h
         boolean_queries/expression_tree.cpp
         boolean_queries/expression_tree.h
-        common/utils.cpp common/utils.h
+        common/utils.cpp
+        common/utils.h
         search_engine/search_engine.cpp
-        search_engine/search_engine.h
-        bsbi/inv_index_provider.cpp
-        bsbi/inv_index_provider.h)
+        search_engine/search_engine.h)
 
 add_executable(IR_tests
         test.cpp
@@ -84,6 +85,8 @@ add_executable(IR_tests
         bsbi/block_processor.h
         bsbi/record_merger.cpp
         bsbi/record_merger.h
+        bsbi/inv_index_provider.cpp
+        bsbi/inv_index_provider.h
         bsbi/postings/posting.cpp
         bsbi/postings/posting.h
         bsbi/postings/posting_list.cpp
@@ -98,12 +101,15 @@ add_executable(IR_tests
         common/serialization/stream_reader.h
         common/serialization/tests/tests.cpp
         boolean_queries/set_operations.h
+        boolean_queries/set_operations.cpp
         boolean_queries/token.cpp
         boolean_queries/token.h
         boolean_queries/parser.h
         boolean_queries/parser.cpp
         boolean_queries/tokenization.cpp
         boolean_queries/tokenization.h
+        boolean_queries/expression_tree.cpp
+        boolean_queries/expression_tree.h
         boolean_queries/tests/tests.cpp
         common/utils.cpp
         common/utils.h
