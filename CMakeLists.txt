@@ -15,7 +15,6 @@ FetchContent_MakeAvailable(googletest)
 
 add_executable(IR
         main.cpp
-        test_framework/test_runner.h
         document/document.cpp
         document/document.h
         document/document_reader.cpp
@@ -114,7 +113,8 @@ add_executable(IR_tests
         common/utils.cpp
         common/utils.h
         search_engine/search_engine.cpp
-        search_engine/search_engine.h)
+        search_engine/search_engine.h
+        search_engine/tests/test.cpp)
 
 
 target_link_libraries(IR_tests gtest gtest_main)
