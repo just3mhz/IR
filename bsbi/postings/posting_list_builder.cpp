@@ -13,7 +13,7 @@ PostingList PostingListBuilder::makePostingList(uint64_t termId, std::vector<uin
 
     std::sort(docIds.begin(), docIds.end());
     pList.postings_.emplace_back(docIds[0]);
-    for(int i = 0; i < docIds.size(); ++i) {
+    for(int i = 1; i < docIds.size(); ++i) {
         if (docIds[i] == docIds[i - 1])
             continue;
         pList.postings_.emplace_back(docIds[i]);
