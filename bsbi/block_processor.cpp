@@ -15,9 +15,9 @@ std::vector<Record> BlockProcessor::processBlockSingleThread(Iterator begin, Ite
     for (Iterator it = begin; it != end; ++it) {
         const document::Document& doc = *it;
         for (const std::string& term : doc.title())
-            records.push_back({ dict.getTermId(term), doc.id() });
+            records.emplace_back(dict.getTermId(term), doc.id());
         for (const std::string& term : doc.text())
-            records.push_back({ dict.getTermId(term), doc.id() });
+            records.emplace_back(dict.getTermId(term), doc.id());
     }
     return records;
 }

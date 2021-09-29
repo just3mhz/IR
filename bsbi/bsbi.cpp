@@ -1,12 +1,13 @@
 #include "bsbi.h"
 
 #include "record_merger.h"
+#include "../common/serialization/serialize.h"
 
 namespace bsbi {
 
 namespace {
 
-std::string makeFilename(std::size_t blockNum)
+std::filesystem::path makeFilename(std::size_t blockNum)
 {
     return "block_" + std::to_string(blockNum) + ".txt";
 }
@@ -19,23 +20,33 @@ void cleanTempFiles(Iterator begin, Iterator end)
     }
 }
 
+void dumpRecords(const std::vector<Record>& records, const std::filesystem::path& outputPath)
+{
+    std::ofstream ofs(outputPath, std::ios::binary);
+    common::serialization::write(ofs, records.size());
+    for(const auto& record: records) {
+        common::serialization::write(ofs, record);
+    }
+}
+
 }
 
 BlockedSortBasedIndexer::BlockedSortBasedIndexer(std::size_t blockSize)
     : blockSize_(blockSize)
     , tokenizer_(std::make_shared<tokenization::SimpleTokenizer>())
-    , recordDumper_(std::make_unique<RecordDumperTxt>())
 {
 }
 
-void BlockedSortBasedIndexer::makeIndex(const std::string& inputFilePath, const std::string& outputFilePath)
+void BlockedSortBasedIndexer::makeIndex(
+    const std::filesystem::path& inputFilePath,
+    const std::filesystem::path& outputFilePath)
 {
     document::DocumentReader reader(inputFilePath, blockSize_, tokenizer_.get());
     std::vector<document::Document> block;
     block.reserve(blockSize_);
 
     std::size_t blocksProcessed = 0;
-    std::vector<std::string> tempFiles;
+    std::vector<std::filesystem::path> tempFiles;
 
     while (!reader.allDocsRead()) {
         for(int i = 0; i < blockSize_ && !reader.allDocsRead(); ++i) {
@@ -48,12 +59,12 @@ void BlockedSortBasedIndexer::makeIndex(const std::string& inputFilePath, const 
         ++blocksProcessed;
 
         tempFiles.push_back(makeFilename(blocksProcessed));
-        recordDumper_->dump(tempFiles.back(), records);
+        dumpRecords(records, tempFiles.back());
 
         block.clear();
     }
 
-    RecordMerger::merge(tempFiles);
+    RecordMerger::merge(tempFiles, outputFilePath);
     cleanTempFiles(tempFiles.begin(), tempFiles.end());
 
     auxiliary::SingletonDictionary::getInstance().dump("dict.json");

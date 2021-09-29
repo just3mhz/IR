@@ -9,6 +9,9 @@ namespace bsbi {
 
 struct Record : public common::serialization::Serializable
 {
+    Record() = default;
+    Record(uint64_t termId, uint64_t docId);
+
     std::size_t serialize(std::ostream& os) const override;
     std::size_t deserialize(std::istream& is) override;
     std::size_t serializedSize() const noexcept override;
@@ -17,16 +20,8 @@ struct Record : public common::serialization::Serializable
     uint64_t docId{0};
 };
 
-bool operator==(const Record& lhs, const Record& rhs) {
-    return lhs.docId == rhs.docId && lhs.termId == rhs.termId;
-}
-
-bool operator<(const Record& lhs, const Record& rhs) {
-    if (lhs.termId == rhs.termId) {
-        return lhs.docId < rhs.docId;
-    }
-    return lhs.termId < rhs.termId;
-}
+bool operator==(const Record& lhs, const Record& rhs);
+bool operator<(const Record& lhs, const Record& rhs);
 
 std::ostream& operator<<(std::ostream& os, const Record& record);
 
