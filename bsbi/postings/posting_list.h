@@ -7,7 +7,7 @@
 
 namespace bsbi::postings {
 
-class PostingList final : common::serialization::Serializable {
+class PostingList final : public common::serialization::Serializable {
 public:
     explicit PostingList(uint64_t termId);
 
