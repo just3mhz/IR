@@ -67,10 +67,10 @@ add_library(IR_LIBRARY STATIC
         search_engine/search_engine.cpp
         search_engine/search_engine.h)
 
-add_executable(IR
-        main.cpp)
+add_executable(IndexBuilder
+        index_builder_app.cpp)
 
-target_link_libraries(IR IR_LIBRARY)
+target_link_libraries(IndexBuilder IR_LIBRARY)
 
 add_executable(IR_tests
         test.cpp
@@ -85,7 +85,7 @@ target_link_libraries(IR_tests IR_LIBRARY)
 
 if (Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
-    target_link_libraries(IR ${Boost_LIBRARIES})
+    target_link_libraries(IndexBuilder ${Boost_LIBRARIES})
 endif()
 
 add_test(NAME IR_tests COMMAND IR_tests)
