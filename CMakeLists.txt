@@ -3,6 +3,12 @@ project(IR)
 
 set(CMAKE_CXX_STANDARD 20)
 
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
+
+find_package(Boost 1.76.0 COMPONENTS program_options)
+
 include(FetchContent)
 FetchContent_Declare(
         googletest
@@ -76,4 +82,10 @@ add_executable(IR_tests
 
 target_link_libraries(IR_tests gtest gtest_main)
 target_link_libraries(IR_tests IR_LIBRARY)
+
+if (Boost_FOUND)
+    include_directories(${Boost_INCLUDE_DIRS})
+    target_link_libraries(IR ${Boost_LIBRARIES})
+endif()
+
 add_test(NAME IR_tests COMMAND IR_tests)
