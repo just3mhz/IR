@@ -1,4 +1,5 @@
 #include "bsbi/bsbi.h"
+#include "logging.h"
 
 #include "boost/program_options.hpp"
 #include "boost/log/trivial.hpp"
@@ -41,6 +42,7 @@ options::variables_map parseArgs(int argc, char** argv)
 int main(int argc, char** argv)
 {
     auto variablesMap = parseArgs(argc, argv);
+    initLogging("index_builder.log");
     buildIndex(variablesMap["documents"].as<std::filesystem::path>(),
         variablesMap["output"].as<std::filesystem::path>());
     return 0;
