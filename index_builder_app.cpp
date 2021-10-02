@@ -1,4 +1,5 @@
 #include "bsbi/bsbi.h"
+#include "bsbi/inv_index_provider.h"
 #include "logging.h"
 
 #include "boost/program_options.hpp"

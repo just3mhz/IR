@@ -72,13 +72,13 @@ void BlockedSortBasedIndexer::makeIndex(
 
         ++blocksProcessed;
 
-        tempFiles.push_back(makeFilename(outputDirectory / "tmp", blocksProcessed));
+        tempFiles.push_back(makeFilename(outputDirectory, blocksProcessed));
         dumpRecords(records, tempFiles.back());
 
         block.clear();
     }
 
-    RecordMerger::merge(tempFiles, outputDirectory / "index.bin");
+    RecordMerger::merge(tempFiles, outputDirectory);
     cleanTempFiles(tempFiles.begin(), tempFiles.end());
 
     auxiliary::SingletonDictionary::getInstance().dump(outputDirectory / "dict.json");
