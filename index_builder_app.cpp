@@ -1,6 +1,7 @@
 #include "bsbi/bsbi.h"
 
 #include "boost/program_options.hpp"
+#include "boost/log/trivial.hpp"
 
 namespace options = boost::program_options;
 
@@ -8,7 +9,7 @@ void buildIndex(
     const std::filesystem::path& documentsPath,
     const std::filesystem::path& outputPath)
 {
-    std::cout << "Build index for " << documentsPath << std::endl;
+    BOOST_LOG_TRIVIAL(info) << "Build index for " << documentsPath;
     bsbi::BlockedSortBasedIndexer indexer(2);
     indexer.makeIndex(documentsPath, outputPath);
 }

@@ -79,7 +79,6 @@ void RecordMerger::merge(
 
         const auto pList = postings::PostingListBuilder::makePostingList(termId, docIds);
         common::serialization::write(ofs, pList);
-        std::cerr << pList << '\n';
     }
 }
 
