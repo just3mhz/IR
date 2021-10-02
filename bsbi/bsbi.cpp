@@ -2,6 +2,9 @@
 
 #include "record_merger.h"
 #include "../common/serialization/serialize.h"
+#include "../common/handler.h"
+
+#include <source_location>
 
 namespace bsbi {
 
@@ -29,6 +32,16 @@ void dumpRecords(const std::vector<Record>& records, const std::filesystem::path
     }
 }
 
+std::vector<document::Document> readNextBlock(const std::size_t blockSize, document::DocumentReader& reader)
+{
+    std::vector<document::Document> block;
+    block.reserve(blockSize);
+    for(int i = 0; i < blockSize && !reader.allDocsRead(); ++i) {
+        block.push_back(reader.readNext());
+    }
+    return block;
+}
+
 }
 
 BlockedSortBasedIndexer::BlockedSortBasedIndexer(std::size_t blockSize)
@@ -41,19 +54,17 @@ void BlockedSortBasedIndexer::makeIndex(
     const std::filesystem::path& inputFilePath,
     const std::filesystem::path& outputFilePath)
 {
+    common::PerformanceHandler performanceHandler("make_index");
+
     document::DocumentReader reader(inputFilePath, blockSize_, tokenizer_.get());
-    std::vector<document::Document> block;
-    block.reserve(blockSize_);
 
     std::size_t blocksProcessed = 0;
     std::vector<std::filesystem::path> tempFiles;
 
     while (!reader.allDocsRead()) {
-        for(int i = 0; i < blockSize_ && !reader.allDocsRead(); ++i) {
-            block.push_back(reader.readNext());
-        }
-
+        auto block = readNextBlock(blockSize_, reader);
         auto records = blockProcessor_.processBlock(block.begin(), block.end());
+
         std::sort(records.begin(), records.end());
 
         ++blocksProcessed;
