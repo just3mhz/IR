@@ -4,15 +4,13 @@
 #include "../common/serialization/serialize.h"
 #include "../common/handler.h"
 
-#include <source_location>
-
 namespace bsbi {
 
 namespace {
 
-std::filesystem::path makeFilename(std::size_t blockNum)
+std::filesystem::path makeFilename(const std::filesystem::path& dir, std::size_t blockNum)
 {
-    return "block_" + std::to_string(blockNum) + ".txt";
+    return dir / ("block_" + std::to_string(blockNum) + ".records   ");
 }
 
 template<class Iterator>
@@ -52,9 +50,14 @@ BlockedSortBasedIndexer::BlockedSortBasedIndexer(std::size_t blockSize)
 
 void BlockedSortBasedIndexer::makeIndex(
     const std::filesystem::path& inputFilePath,
-    const std::filesystem::path& outputFilePath)
+    const std::filesystem::path& outputDirectory)
 {
     common::PerformanceHandler performanceHandler("make_index");
+
+    if (!std::filesystem::exists(outputDirectory)) {
+        std::filesystem::create_directories(outputDirectory);
+    }
+    assert(std::filesystem::is_directory(outputDirectory));
 
     document::DocumentReader reader(inputFilePath, blockSize_, tokenizer_.get());
 
@@ -69,16 +72,16 @@ void BlockedSortBasedIndexer::makeIndex(
 
         ++blocksProcessed;
 
-        tempFiles.push_back(makeFilename(blocksProcessed));
+        tempFiles.push_back(makeFilename(outputDirectory / "tmp", blocksProcessed));
         dumpRecords(records, tempFiles.back());
 
         block.clear();
     }
 
-    RecordMerger::merge(tempFiles, outputFilePath);
+    RecordMerger::merge(tempFiles, outputDirectory / "index.bin");
     cleanTempFiles(tempFiles.begin(), tempFiles.end());
 
-    auxiliary::SingletonDictionary::getInstance().dump("dict.json");
+    auxiliary::SingletonDictionary::getInstance().dump(outputDirectory / "dict.json");
 }
 
 }
