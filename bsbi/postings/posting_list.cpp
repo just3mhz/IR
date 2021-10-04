@@ -1,7 +1,5 @@
 #include "posting_list.h"
 
-#include "../../auxiliary/dictionary.h"
-
 namespace bsbi::postings {
 
 PostingList::PostingList(uint64_t termId)
@@ -59,9 +57,7 @@ const std::vector<Posting>& PostingList::rawPostings() const
 
 std::ostream& operator<<(std::ostream& os, const PostingList& postingList)
 {
-    os << "{ " << postingList.termId() << " "
-       << auxiliary::SingletonDictionary::getInstance().getTerm(postingList.termId())
-       << " : [";
+    os << "{ " << postingList.termId() << " : [";
     bool first = true;
     for (const auto& posting: postingList.rawPostings()) {
         if (!first)
