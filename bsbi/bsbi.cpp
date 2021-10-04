@@ -4,6 +4,8 @@
 #include "../common/serialization/serialize.h"
 #include "../common/handler.h"
 
+#include <boost/log/trivial.hpp>
+
 namespace bsbi {
 
 namespace {
@@ -74,14 +76,14 @@ void BlockedSortBasedIndexer::makeIndex(
 
         tempFiles.push_back(makeFilename(outputDirectory, blocksProcessed));
         dumpRecords(records, tempFiles.back());
-
-        block.clear();
     }
 
     RecordMerger::merge(tempFiles, outputDirectory);
     cleanTempFiles(tempFiles.begin(), tempFiles.end());
 
-    auxiliary::SingletonDictionary::getInstance().dump(outputDirectory / "dict.json");
+    std::ofstream dictOfs(outputDirectory / "dict.bin");
+    common::serialization::write(dictOfs, blockProcessor_.dictionary());
+    BOOST_LOG_TRIVIAL(info) << "Dump dictionary to " << std::filesystem::absolute(outputDirectory / "dict.bin");
 }
 
 }

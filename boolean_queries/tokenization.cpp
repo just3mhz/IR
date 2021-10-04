@@ -1,7 +1,5 @@
 #include "tokenization.h"
 
-#include "../auxiliary/dictionary.h"
-
 namespace boolean_queries {
 
 namespace {

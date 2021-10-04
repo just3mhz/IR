@@ -2,6 +2,7 @@
 
 #include "record.h"
 #include "../document/document.h"
+#include "../common/dictionary.h"
 
 #include <vector>
 
@@ -16,6 +17,10 @@ public:
 
     template<class Iterator>
     std::vector<Record> processBlockSingleThread(Iterator begin, Iterator end);
+
+    const common::Dictionary& dictionary() const;
+private:
+    common::Dictionary dict_;
 };
 
 } // namespace bsbi

@@ -1,6 +1,5 @@
 #include "block_processor.h"
 
-#include "../auxiliary/dictionary.h"
 #include "../common/handler.h"
 
 #include <cassert>
@@ -13,13 +12,20 @@ std::vector<Record> BlockProcessor::processBlockSingleThread(Iterator begin, Ite
     common::PerformanceHandler performanceHandler("process_block_single_thread");
 
     std::vector<Record> records;
-    auto& dict = auxiliary::SingletonDictionary::getInstance();
+
+    auto processText = [this, &records](const std::vector<std::string>& text, uint64_t docId) {
+        for (const std::string& term : text) {
+            if (!dict_.contains(term)) {
+                dict_.insert(term, dict_.size());
+            }
+            records.emplace_back(dict_.at(term), docId);
+        }
+    };
+
     for (Iterator it = begin; it != end; ++it) {
         const document::Document& doc = *it;
-        for (const std::string& term : doc.title())
-            records.emplace_back(dict.getTermId(term), doc.id());
-        for (const std::string& term : doc.text())
-            records.emplace_back(dict.getTermId(term), doc.id());
+        processText(doc.title(), doc.id());
+        processText(doc.text(), doc.id());
     }
     return records;
 }
@@ -29,6 +35,11 @@ std::vector<Record> BlockProcessor::processBlock(Iterator begin, Iterator end, s
 {
     assert(threads > 0);
     return processBlockSingleThread(begin, end);
+}
+
+const common::Dictionary& BlockProcessor::dictionary() const
+{
+    return dict_;
 }
 
 template std::vector<Record> BlockProcessor::processBlockSingleThread(std::vector<document::Document>::iterator begin, std::vector<document::Document>::iterator end);

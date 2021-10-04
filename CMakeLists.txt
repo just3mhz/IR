@@ -28,8 +28,6 @@ add_library(IR_LIBRARY STATIC
         tokenization/tokenization.h
         tokenization/filter.cpp
         tokenization/filter.h
-        auxiliary/dictionary.cpp
-        auxiliary/dictionary.h
         bsbi/bsbi.h
         bsbi/record.h
         bsbi/record.cpp
@@ -52,6 +50,10 @@ add_library(IR_LIBRARY STATIC
         common/serialization/serializable.h
         common/serialization/stream_writer.h
         common/serialization/stream_reader.h
+        common/handler.cpp
+        common/handler.h
+        common/dictionary.cpp
+        common/dictionary.h
         boolean_queries/set_operations.h
         boolean_queries/set_operations.cpp
         boolean_queries/token.cpp
@@ -65,7 +67,7 @@ add_library(IR_LIBRARY STATIC
         common/utils.cpp
         common/utils.h
         search_engine/search_engine.cpp
-        search_engine/search_engine.h logging.cpp logging.h common/handler.cpp common/handler.h common/dictionary.cpp common/dictionary.h)
+        search_engine/search_engine.h)
 
 add_executable(IndexBuilder
         index_builder_app.cpp logging.cpp logging.h common/dictionary.cpp common/dictionary.h)
@@ -74,11 +76,10 @@ target_link_libraries(IndexBuilder IR_LIBRARY)
 
 add_executable(IR_tests
         test.cpp
-        auxiliary/tests/test_dictionary.cpp
         bsbi/tests/test_bsbi.cpp
         common/serialization/tests/tests.cpp
         boolean_queries/tests/tests.cpp
-        search_engine/tests/test.cpp logging.cpp logging.h common/dictionary.cpp common/dictionary.h)
+        search_engine/tests/test.cpp)
 
 target_link_libraries(IR_tests gtest gtest_main)
 target_link_libraries(IR_tests IR_LIBRARY)

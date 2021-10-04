@@ -4,7 +4,6 @@
 #include "block_processor.h"
 #include "../document/document.h"
 #include "../document/document_reader.h"
-#include "../auxiliary/dictionary.h"
 
 #include <iostream>
 #include <vector>

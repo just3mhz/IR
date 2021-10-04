@@ -1,7 +1,5 @@
 #include "posting.h"
 
-#include "../../auxiliary/dictionary.h"
-
 namespace bsbi::postings {
 
 
