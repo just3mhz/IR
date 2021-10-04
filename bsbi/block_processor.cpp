@@ -1,8 +1,8 @@
 #include "block_processor.h"
 
 #include "../auxiliary/dictionary.h"
+#include "../common/handler.h"
 
-#include <future>
 #include <cassert>
 
 namespace bsbi {
@@ -10,14 +10,16 @@ namespace bsbi {
 template <class Iterator>
 std::vector<Record> BlockProcessor::processBlockSingleThread(Iterator begin, Iterator end)
 {
+    common::PerformanceHandler performanceHandler("process_block_single_thread");
+
     std::vector<Record> records;
     auto& dict = auxiliary::SingletonDictionary::getInstance();
     for (Iterator it = begin; it != end; ++it) {
         const document::Document& doc = *it;
         for (const std::string& term : doc.title())
-            records.push_back({ dict.getTermId(term), doc.id() });
+            records.emplace_back(dict.getTermId(term), doc.id());
         for (const std::string& term : doc.text())
-            records.push_back({ dict.getTermId(term), doc.id() });
+            records.emplace_back(dict.getTermId(term), doc.id());
     }
     return records;
 }

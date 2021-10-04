@@ -1,47 +1,25 @@
 #include "posting_list_builder.h"
 
+#include <algorithm>
+
 namespace bsbi::postings {
 
-PostingListBuilder::PostingListBuilder(uint64_t termId)
-    : termId_(termId)
-{}
-
-uint64_t PostingListBuilder::termId() const
+PostingList PostingListBuilder::makePostingList(uint64_t termId, std::vector<uint64_t> docIds)
 {
-    return termId_;
-}
+    PostingList pList(termId);
 
-void PostingListBuilder::processRecord(const Record& record)
-{
-    if (record.termId != termId_) {
-        std::cerr << "Skipping record " << record << "\n";
-        return;
+    if (docIds.empty())
+        return pList;
+
+    std::sort(docIds.begin(), docIds.end());
+    pList.postings_.emplace_back(docIds[0]);
+    for(int i = 1; i < docIds.size(); ++i) {
+        if (docIds[i] == docIds[i - 1])
+            continue;
+        pList.postings_.emplace_back(docIds[i]);
     }
 
-    if (!postings_.contains(record.docId)) {
-        postings_.insert({ record.docId, Posting(record.docId) });
-        return;
-    }
-
-    auto& posting = postings_.at(record.docId);
-    posting.count_ += 1;
-}
-
-PostingList PostingListBuilder::createPostingList() const
-{
-    std::vector<Posting> postings;
-    postings.reserve(postings_.size());
-    for (const auto& [docId, posting]: postings_) {
-        postings.push_back(posting);
-    }
-
-    std::sort(postings.begin(), postings.end(),
-        [](const Posting& lhs, const Posting& rhs) {return lhs.docId_ < rhs.docId(); });
-
-    PostingList postingList(termId_);
-    postingList.postings_ = std::move(postings);
-
-    return postingList;
+    return pList;
 }
 
 } // namespace bsbi::postings

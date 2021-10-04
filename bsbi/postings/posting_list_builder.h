@@ -10,16 +10,7 @@ namespace bsbi::postings {
 
 class PostingListBuilder {
 public:
-    explicit PostingListBuilder(uint64_t termId);
-
-    uint64_t termId() const;
-
-    void processRecord(const Record& record);
-
-    PostingList createPostingList() const;
-private:
-    uint64_t termId_;
-    std::unordered_map<uint64_t, Posting> postings_;
+    static PostingList makePostingList(uint64_t termId, std::vector<uint64_t> docId);
 };
 
 } // namespace bsbi::postings

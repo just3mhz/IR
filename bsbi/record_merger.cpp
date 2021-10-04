@@ -1,58 +1,93 @@
 #include "record_merger.h"
 
+#include "../common/handler.h"
+#include "../common/serialization/serialize.h"
 #include "postings/posting_list_builder.h"
 
+#include <cassert>
+#include <chrono>
 #include <fstream>
-#include <set>
 #include <optional>
+#include <set>
+
+#include <boost/log/trivial.hpp>
 
 namespace bsbi {
 
+namespace {
 
-void RecordMerger::merge(const std::vector<std::string>& paths)
-{
-    std::vector<std::ifstream> streams;
-    streams.reserve(paths.size());
-    for (const auto& path: paths) {
-        streams.emplace_back(path);
+class Reader {
+public:
+    explicit Reader(const std::vector<std::filesystem::path>& inputPaths)
+        : streams_(inputPaths.size())
+        , recordsCount_(inputPaths.size())
+    {
+        for (std::size_t i = 0; i < inputPaths.size(); ++i) {
+            streams_[i] = std::ifstream(inputPaths[i]);
+            common::serialization::read(streams_[i], recordsCount_[i]);
+            readFromStream(i);
+        }
     }
 
-    std::set<std::pair<Record, std::size_t>> pq;
+    bool empty()
+    {
+        return priorityQueue_.empty();
+    }
 
-    for(int i = 0; i < streams.size(); ++i) {
+    const Record& current()
+    {
+        return priorityQueue_.begin()->first;
+    }
+
+    void readNext()
+    {
+        const std::size_t streamId = priorityQueue_.begin()->second;
+        priorityQueue_.erase(priorityQueue_.begin());
+        readFromStream(streamId);
+    }
+
+private:
+    void readFromStream(std::size_t streamId)
+    {
+        if (recordsCount_[streamId] == 0) {
+            return;
+        }
+
         Record record;
-        if (streams[i] >> record.termId >> record.docId) {
-            pq.emplace(record, i);
-        }
+        common::serialization::read(streams_[streamId], record);
+        --recordsCount_[streamId];
+        priorityQueue_.emplace(record, streamId);
     }
 
-    std::ofstream ofs("output.txt");
-    std::optional<postings::PostingListBuilder> builder;
-    while ( !pq.empty() ) {
-        const auto item = *pq.begin();
-        pq.erase(*pq.begin());
+    std::vector<std::ifstream> streams_;
+    std::vector<std::size_t> recordsCount_;
+    std::set<std::pair<Record, std::size_t>> priorityQueue_;
+};
 
-        Record record = item.first;
-        std::size_t streamId = item.second;
+} // namespace
 
-        Record nextRecord;
-        if (streams[streamId] >> nextRecord.termId >> nextRecord.docId) {
-            pq.emplace(nextRecord, streamId);
+void RecordMerger::merge(
+    const std::vector<std::filesystem::path>& inputPaths,
+    const std::filesystem::path& outputDir)
+{
+    common::PerformanceHandler performanceHandler("merge_processed_blocks");
+    Reader recordReader(inputPaths);
+    std::ofstream postings_ofs(outputDir / "postings.bin", std::ios::binary);
+    std::ofstream offsets_ofs(outputDir / "offsets.bin", std::ios::binary);
+    while (!recordReader.empty()) {
+        const uint64_t termId = recordReader.current().termId;
+
+        std::vector<uint64_t> docIds;
+        while (!recordReader.empty() && termId == recordReader.current().termId) {
+            docIds.push_back(recordReader.current().docId);
+            recordReader.readNext();
         }
+        const auto pList = postings::PostingListBuilder::makePostingList(termId, docIds);
+        common::serialization::write(postings_ofs, pList);
 
-        if (builder && builder->termId() == record.termId) {
-            builder->processRecord(record);
-            continue;
-        }
-
-        if (builder)
-            ofs << builder->createPostingList() << '\n';
-
-        builder = postings::PostingListBuilder(record.termId);
-        builder->processRecord(record);
+        common::serialization::write(offsets_ofs, termId);
+        common::serialization::write(offsets_ofs, static_cast<std::size_t>(postings_ofs.tellp()));
     }
-
-    ofs.close();
 }
 
 }
