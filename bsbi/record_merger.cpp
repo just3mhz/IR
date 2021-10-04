@@ -72,8 +72,8 @@ void RecordMerger::merge(
 {
     common::PerformanceHandler performanceHandler("merge_processed_blocks");
     Reader recordReader(inputPaths);
-    std::ofstream postings_ofs(outputDir / "postings.bin", std::ios::binary);
-    std::ofstream offsets_ofs(outputDir / "offsets.bin", std::ios::binary);
+    std::ofstream postingsOfs(outputDir / "postings.bin", std::ios::binary);
+    std::ofstream offsetsOfs(outputDir / "offsets.bin", std::ios::binary);
     while (!recordReader.empty()) {
         const uint64_t termId = recordReader.current().termId;
 
@@ -82,11 +82,12 @@ void RecordMerger::merge(
             docIds.push_back(recordReader.current().docId);
             recordReader.readNext();
         }
+        const std::size_t pos = static_cast<std::size_t>(postingsOfs.tellp());
         const auto pList = postings::PostingListBuilder::makePostingList(termId, docIds);
-        common::serialization::write(postings_ofs, pList);
+        common::serialization::write(postingsOfs, pList);
 
-        common::serialization::write(offsets_ofs, termId);
-        common::serialization::write(offsets_ofs, static_cast<std::size_t>(postings_ofs.tellp()));
+        common::serialization::write(offsetsOfs, termId);
+        common::serialization::write(offsetsOfs, pos);
     }
 }
 

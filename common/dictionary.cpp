@@ -119,7 +119,7 @@ std::size_t Dictionary::deserialize(std::istream& is)
         common::serialization::read(is, termId);
 
         std::string term;
-        common::serialization::read(is, termId);
+        common::serialization::read(is, term);
 
         if (termToId.contains(term) || idToTerm.contains(termId)) {
             BOOST_LOG_TRIVIAL(warning) << "Inconsistent serialized dictionary";

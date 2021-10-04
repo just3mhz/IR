@@ -72,7 +72,10 @@ add_library(IR_LIBRARY STATIC
 add_executable(IndexBuilder
         index_builder_app.cpp logging.cpp logging.h common/dictionary.cpp common/dictionary.h)
 
+add_executable(SearchApp search_app.cpp)
+
 target_link_libraries(IndexBuilder IR_LIBRARY)
+target_link_libraries(SearchApp IR_LIBRARY)
 
 add_executable(IR_tests
         test.cpp
@@ -87,6 +90,7 @@ target_link_libraries(IR_tests IR_LIBRARY)
 if (Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
     target_link_libraries(IndexBuilder ${Boost_LIBRARIES} boost_log_setup)
+    target_link_libraries(SearchApp ${Boost_LIBRARIES} boost_log_setup)
     target_link_libraries(IR_LIBRARY ${Boost_LIBRARIES} boost_log_setup)
 endif()
 
