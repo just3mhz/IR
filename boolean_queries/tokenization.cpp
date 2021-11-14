@@ -27,7 +27,9 @@ std::string extractTerm(std::size_t i, const std::string& rawExpression) {
 
 } // namespace
 
-std::vector<std::shared_ptr<Token>> tokenizeExpression(const std::string& rawExpression)
+std::vector<std::shared_ptr<Token>> tokenizeExpression(
+    const std::string& rawExpression,
+    const tokenization::WordTokenizer& wordTokenizer)
 {
     std::vector<std::shared_ptr<Token>> tokens;
     std::size_t i = 0;
@@ -37,7 +39,7 @@ std::vector<std::shared_ptr<Token>> tokenizeExpression(const std::string& rawExp
         } else if (std::isalpha(rawExpression[i])) {
             auto term = extractTerm(i, rawExpression);
             i += term.size();
-            tokens.push_back(std::make_shared<Term>(term));
+            tokens.push_back(std::make_shared<Term>(wordTokenizer.tokenize(term)));
         } else if (isAND(i, rawExpression)) {
             i += 2;
             tokens.push_back(std::make_shared<Operator>(Operator::Type::AND));

@@ -8,8 +8,13 @@ int main() {
 
     std::string query;
     while (std::getline(std::cin, query, '\n')) {
+        int resultsPrinted = 0;
         for(const auto& docId: searchEngine.search(query)) {
             std::cout << docId << ' ';
+            resultsPrinted += 1;
+            if (resultsPrinted > 10) {
+                break;
+            }
         }
         std::cout << std::endl;
     }

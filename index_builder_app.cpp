@@ -12,7 +12,7 @@ void buildIndex(
     const std::filesystem::path& outputPath)
 {
     BOOST_LOG_TRIVIAL(info) << "Build index for " << documentsPath;
-    bsbi::BlockedSortBasedIndexer indexer(2);
+    bsbi::BlockedSortBasedIndexer indexer(10000);
     indexer.makeIndex(documentsPath, outputPath);
 }
 

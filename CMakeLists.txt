@@ -67,7 +67,7 @@ add_library(IR_LIBRARY STATIC
         common/utils.cpp
         common/utils.h
         search_engine/search_engine.cpp
-        search_engine/search_engine.h)
+        search_engine/search_engine.h tokenization/word_tokenizer.cpp tokenization/word_tokenizer.h)
 
 add_executable(IndexBuilder
         index_builder_app.cpp logging.cpp logging.h common/dictionary.cpp common/dictionary.h)
