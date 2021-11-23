@@ -15,6 +15,7 @@ public:
     virtual const std::shared_ptr<Node>& right() const = 0;
     virtual void setLeft(std::shared_ptr<Node> left) = 0;
     virtual void setRight(std::shared_ptr<Node> right) = 0;
+    virtual int childNum() const = 0;
 };
 
 class ExpressionTree {

@@ -20,6 +20,11 @@ public:
     std::vector<uint64_t> getDocIds(const uint64_t termId) const override {
         return {};
     }
+
+    const std::vector<uint64_t>& getDocIds() const override {
+        const static std::vector<uint64_t> docIds{1, 2, 3, 4, 6, 7, 8, 9, 11, 14, 15, 128};
+        return docIds;
+    }
 };
 
 class SearchEngineFixture: public testing::Test {
@@ -54,6 +59,19 @@ TEST_F(SearchEngineFixture, TestAND) {
     std::vector<uint64_t> expected = {2, 3};
     ASSERT_EQ(engine_.search("a && def"), expected);
     ASSERT_EQ(engine_.search("def && a"), expected);
+}
+
+TEST_F(SearchEngineFixture, TestNOT)
+{
+    std::vector<uint64_t> expected = {4, 6, 7, 8, 9, 11, 14, 15, 128};
+    ASSERT_EQ(engine_.search("!! a"), expected);
+}
+
+TEST_F(SearchEngineFixture, TestAND_NOT)
+{
+    std::vector<uint64_t> expected = {4, 6, 7, 8};
+    ASSERT_EQ(engine_.search("!! a && def"), expected);
+    ASSERT_EQ(engine_.search("def && !! a"), expected);
 }
 
 TEST_F(SearchEngineFixture, TestLong) {

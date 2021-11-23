@@ -57,6 +57,8 @@ int Operator::priority() const
         return HIGH_PRIORITY;
     case OR:
         return LOW_PRIORITY;
+    case NOT:
+        return UNARY_PRIORITY;
     }
     throw std::runtime_error("Unknown operator type");
 }
@@ -94,6 +96,8 @@ std::ostream& operator<<(std::ostream& os, const Operator& token)
         return os << "&&";
     case Operator::Type::OR:
         return os << "||";
+    case Operator::Type::NOT:
+        return os << "!!";
     }
     throw std::runtime_error("Unknown Operator::Type");
 }

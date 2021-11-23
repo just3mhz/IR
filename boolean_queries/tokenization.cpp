@@ -17,6 +17,12 @@ bool isOR(std::size_t i, const std::string& rawExpression) {
            && rawExpression[i + 1] == '|';
 }
 
+bool isNOT(std::size_t i, const std::string& rawExpression) {
+    return i < rawExpression.size() - 1
+           && rawExpression[i] == '!'
+           && rawExpression[i + 1] == '!';
+}
+
 std::string extractTerm(std::size_t i, const std::string& rawExpression) {
     std::size_t j = i;
     while (j < rawExpression.size() && std::isalpha(rawExpression[j])) {
@@ -46,6 +52,9 @@ std::vector<std::shared_ptr<Token>> tokenizeExpression(
         } else if (isOR(i, rawExpression)) {
             i += 2;
             tokens.push_back(std::make_shared<Operator>(Operator::Type::OR));
+        } else if (isNOT(i, rawExpression)) {
+            i += 2;
+            tokens.push_back(std::make_shared<Operator>(Operator::Type::NOT));
         } else if (rawExpression[i] == '(') {
             i++;
             tokens.push_back(std::make_shared<Bracket>(Bracket::Type::OPEN));

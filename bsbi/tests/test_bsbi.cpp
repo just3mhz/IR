@@ -18,18 +18,18 @@ protected:
             { "term4", "term5", "term6" }));
 
         expected = {
-            { .termId = 0, .docId = 0 },
-            { .termId = 1, .docId = 0 },
-            { .termId = 2, .docId = 0 },
-            { .termId = 1, .docId = 0 },
-            { .termId = 2, .docId = 0 },
-            { .termId = 3, .docId = 0 },
-            { .termId = 2, .docId = 1 },
-            { .termId = 3, .docId = 1 },
-            { .termId = 4, .docId = 1 },
-            { .termId = 3, .docId = 1 },
-            { .termId = 4, .docId = 1 },
-            { .termId = 5, .docId = 1 }
+            bsbi::Record(0, 0),
+            bsbi::Record{1, 0},
+            bsbi::Record{2, 0},
+            bsbi::Record{1, 0},
+            bsbi::Record{2, 0},
+            bsbi::Record{3, 0},
+            bsbi::Record{2, 1},
+            bsbi::Record{3, 1},
+            bsbi::Record{4, 1},
+            bsbi::Record{3, 1},
+            bsbi::Record{4, 1},
+            bsbi::Record{5, 1}
         };
     }
 

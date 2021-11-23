@@ -62,6 +62,7 @@ public:
 private:
     constexpr static int LOW_PRIORITY = 0;
     constexpr static int HIGH_PRIORITY = 1;
+    constexpr static int UNARY_PRIORITY = 2;
     Type type_;
 };
 

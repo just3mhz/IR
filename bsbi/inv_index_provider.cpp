@@ -22,6 +22,21 @@ std::unordered_map<uint64_t, std::size_t> readOffsets(std::ifstream& ifs) {
     return offsets;
 }
 
+std::vector<uint64_t> readDocIdList(std::istream& is) {
+    std::size_t docsCount;
+    common::serialization::read(is, docsCount);
+
+    std::vector<uint64_t> docIdList(docsCount);
+    for (int i = 0; i < docsCount; ++i) {
+        common::serialization::read(is, docIdList[i]);
+        std::string tmpStr;
+        common::serialization::read(is, tmpStr);
+    }
+
+    std::sort(docIdList.begin(), docIdList.end());
+    return docIdList;
+}
+
 std::vector<uint64_t> extractDocIds(const postings::PostingList& postingList) {
     const auto& rawPostings = postingList.rawPostings();
     std::vector<uint64_t> docIds(postingList.rawPostings().size());
@@ -47,6 +62,10 @@ public:
         common::throwIf(!std::filesystem::exists(postingsPath),
                         "Can not find offsets.bin in indexDir");
 
+        std::filesystem::path docIndexPath = indexDir / "document_index.bin";
+        common::throwIf(!std::filesystem::exists(postingsPath),
+                        "Can not find document_index.bin in indexDir");
+
         std::filesystem::path dictPath = indexDir / "dict.bin";
         common::throwIf(!std::filesystem::exists(postingsPath),
                         "Can not find dict.bin in indexDir");
@@ -56,6 +75,9 @@ public:
         std::ifstream offsetsIfs(offsetsPath);
         offsets_ = readOffsets(offsetsIfs);
 
+        std::ifstream docIndexStream(docIndexPath);
+        docIdList_ = readDocIdList(docIndexStream);
+
         std::ifstream dictIfs(dictPath);
         common::serialization::read(dictIfs, dictionary_);
     }
@@ -63,6 +85,7 @@ public:
     std::vector<uint64_t> getDocIds(const std::string& term) const override {
         if (!dictionary_.contains(term))
             return {};
+        std::cerr << dictionary_.at(term) << std::endl;
         return getDocIdsImpl(dictionary_.at(term));
     }
 
@@ -70,6 +93,10 @@ public:
         if (!dictionary_.contains(termId))
             return {};
         return getDocIdsImpl(termId);
+    }
+
+    const std::vector<uint64_t>& getDocIds() const override {
+        return docIdList_;
     }
 
     virtual ~InvIndexProviderImpl() = default;
@@ -85,6 +112,7 @@ private:
 
     mutable std::ifstream postingsIfs_;
     std::unordered_map<uint64_t, std::size_t> offsets_;
+    std::vector<uint64_t> docIdList_;
     common::Dictionary dictionary_;
 };
 

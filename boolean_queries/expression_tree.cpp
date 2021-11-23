@@ -25,7 +25,7 @@ public:
         case Operator::Type::OR:
             return sortedJoin(resultLeft, resultRight);
         case Operator::Type::NOT:
-            return sortedExcept({ }, resultLeft);
+            return sortedExcept(invertedIndexProvider.getDocIds(), resultLeft);
         }
 
         throw std::runtime_error("Unknown Operator::Type");
@@ -45,6 +45,12 @@ public:
 
     void setRight(std::shared_ptr<Node> right) override {
         right_ = std::move(right);
+    }
+
+    int childNum() const override {
+        if (operator_->operatorType() == Operator::Type::NOT)
+            return 1;
+        return 2;
     }
 private:
     std::shared_ptr<Operator> operator_;
@@ -78,6 +84,10 @@ public:
     void setRight(std::shared_ptr<Node> right) override {
         throw std::runtime_error("Attempt to set child node for leaf");
     }
+
+    int childNum() const override {
+        return 0;
+    }
 private:
     std::shared_ptr<Term> term_;
 };
@@ -108,7 +118,9 @@ public:
         case TokenType::OPERATOR:
             node = std::make_shared<OperatorNode>(token);
             node->setLeft(constructTree());
-            node->setRight(constructTree());
+            if (node->childNum() == 2) {
+                node->setRight(constructTree());
+            }
             break;
         default:
             throw std::runtime_error("Unexpected token");

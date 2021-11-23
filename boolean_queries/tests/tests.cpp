@@ -1,5 +1,6 @@
 #include "../set_operations.h"
 #include "../tokenization.h"
+#include "../../tokenization/word_tokenizer.h"
 
 #include "gtest/gtest.h"
 
@@ -71,7 +72,8 @@ TEST(TestParsing, TestTokenization)
         std::make_shared<Bracket>(Bracket::Type::CLOSE),
     };
 
-    std::vector<std::shared_ptr<Token>> actual = tokenizeExpression(rawExpression);
+    tokenization::SimpleWordTokenizer simpleWordTokenizer;
+    std::vector<std::shared_ptr<Token>> actual = tokenizeExpression(rawExpression, simpleWordTokenizer);
     ASSERT_EQ(expected.size(), actual.size());
     for(int i = 0; i < expected.size(); ++i) {
         ASSERT_TRUE(equal(expected[i], actual[i]));
