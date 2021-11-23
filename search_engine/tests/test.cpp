@@ -16,6 +16,10 @@ public:
             return {1, 2 ,3};
         return {};
     }
+
+    std::vector<uint64_t> getDocIds(const uint64_t termId) const override {
+        return {};
+    }
 };
 
 class SearchEngineFixture: public testing::Test {

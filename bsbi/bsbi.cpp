@@ -3,6 +3,7 @@
 #include "record_merger.h"
 #include "../common/serialization/serialize.h"
 #include "../common/handler.h"
+#include "../document/document_index.h"
 
 #include <boost/log/trivial.hpp>
 
@@ -25,6 +26,7 @@ void cleanTempFiles(Iterator begin, Iterator end)
 
 void dumpRecords(const std::vector<Record>& records, const std::filesystem::path& outputPath)
 {
+    common::PerformanceHandler performanceHandler("dump_records");
     std::ofstream ofs(outputPath, std::ios::binary);
     common::serialization::write(ofs, records.size());
     for(const auto& record: records) {
@@ -34,6 +36,7 @@ void dumpRecords(const std::vector<Record>& records, const std::filesystem::path
 
 std::vector<document::Document> readNextBlock(const std::size_t blockSize, document::DocumentReader& reader)
 {
+    common::PerformanceHandler performanceHandler("read_block");
     std::vector<document::Document> block;
     block.reserve(blockSize);
     for(int i = 0; i < blockSize && !reader.allDocsRead(); ++i) {
@@ -65,9 +68,15 @@ void BlockedSortBasedIndexer::makeIndex(
 
     std::size_t blocksProcessed = 0;
     std::vector<std::filesystem::path> tempFiles;
+    auto documentIndex = document::createDocumentIndex();
 
     while (!reader.allDocsRead()) {
         auto block = readNextBlock(blockSize_, reader);
+
+        for(const auto& doc: block) {
+            documentIndex->appendDocument(doc);
+        }
+
         auto records = blockProcessor_.processBlock(block.begin(), block.end());
 
         std::sort(records.begin(), records.end());
@@ -83,7 +92,9 @@ void BlockedSortBasedIndexer::makeIndex(
 
     std::ofstream dictOfs(outputDirectory / "dict.bin");
     common::serialization::write(dictOfs, blockProcessor_.dictionary());
-    BOOST_LOG_TRIVIAL(info) << "Dump dictionary to " << std::filesystem::absolute(outputDirectory / "dict.bin");
+
+    std::ofstream documentIndexStream(outputDirectory / "document_index.bin");
+    common::serialization::write(documentIndexStream, *documentIndex);
 }
 
 }

@@ -20,9 +20,9 @@ void initLogging(const std::filesystem::path& logPath)
 
     logging::register_simple_formatter_factory<logging::trivial::severity_level, char>("Severity");
 
-    logging::add_file_log(
-        keywords::file_name = logPath,
-        keywords::format = messageFormat);
+//    logging::add_file_log(
+//        keywords::file_name = logPath,
+//        keywords::format = messageFormat);
 
     logging::core::get()->set_filter(
         logging::trivial::severity >= logging::trivial::trace);

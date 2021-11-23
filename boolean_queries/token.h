@@ -48,7 +48,8 @@ class Operator: public Token {
 public:
     enum Type {
         AND,
-        OR
+        OR,
+        NOT
     };
 
     explicit Operator(Type operatorType);

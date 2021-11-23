@@ -72,6 +72,7 @@ public:
         return getDocIdsImpl(termId);
     }
 
+    virtual ~InvIndexProviderImpl() = default;
 private:
     std::vector<uint64_t> getDocIdsImpl(const uint64_t termId) const {
         postingsIfs_.seekg(offsets_.at(termId));

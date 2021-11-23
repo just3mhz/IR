@@ -51,4 +51,28 @@ std::vector<uint64_t> sortedJoin(const std::vector<uint64_t>& lhs, const std::ve
     return result;
 }
 
+std::vector<uint64_t> sortedExcept(const std::vector<uint64_t>& lhs, const std::vector<uint64_t>& rhs)
+{
+    std::vector<uint64_t> result;
+    std::size_t i = 0;
+    std::size_t j = 0;
+    while (i < lhs.size() && j < rhs.size()) {
+        if (lhs[i] < rhs[i]) {
+            result.push_back(lhs[i]);
+            ++i;
+        } else if (lhs[i] > rhs[i]) {
+            ++j;
+        } else {
+            ++i;
+            ++j;
+        }
+    }
+
+    for(; i < lhs.size(); ++i) {
+        result.push_back(lhs[i]);
+    }
+
+    return result;
+}
+
 }

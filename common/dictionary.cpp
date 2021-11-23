@@ -2,6 +2,7 @@
 
 #include "serialization/serialize.h"
 #include "utils.h"
+#include "handler.h"
 
 #include <boost/log/trivial.hpp>
 
@@ -97,6 +98,7 @@ Dictionary::Iterator Dictionary::end() const
 
 std::size_t Dictionary::serialize(std::ostream& os) const
 {
+    PerformanceHandler handler("serialize_dictionary");
     const auto pos = os.tellp();
     common::serialization::write(os, idToTerm_.size());
     for (const auto& [termId, term] : idToTerm_) {
@@ -108,6 +110,7 @@ std::size_t Dictionary::serialize(std::ostream& os) const
 
 std::size_t Dictionary::deserialize(std::istream& is)
 {
+    PerformanceHandler handler("deserialize_dictionary");
     const auto pos = is.tellg();
     std::size_t dictSize;
     common::serialization::read(is, dictSize);

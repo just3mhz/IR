@@ -15,14 +15,17 @@ public:
     }
 
     std::vector<uint64_t> evaluate(const bsbi::InvIndexProvider& invertedIndexProvider) const override {
-        std::vector<uint64_t> resultLeft = left_->evaluate(invertedIndexProvider);
-        std::vector<uint64_t> resultRight = right_->evaluate(invertedIndexProvider);
-
+        auto resultLeft = left_->evaluate(invertedIndexProvider);
+        auto resultRight = operator_->operatorType() != Operator::Type::NOT
+                             ? right_->evaluate(invertedIndexProvider)
+                             : std::vector<uint64_t>();
         switch (operator_->operatorType()) {
         case Operator::Type::AND:
             return sortedIntersect(resultLeft, resultRight);
         case Operator::Type::OR:
             return sortedJoin(resultLeft, resultRight);
+        case Operator::Type::NOT:
+            return sortedExcept({ }, resultLeft);
         }
 
         throw std::runtime_error("Unknown Operator::Type");

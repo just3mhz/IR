@@ -35,8 +35,6 @@ protected:
 
     void TearDown() override {
         docs.clear();
-        expected.clear();
-        auxiliary::SingletonDictionary::getInstance().clear();
     }
 
     std::vector<document::Document> docs;

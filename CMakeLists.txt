@@ -67,12 +67,12 @@ add_library(IR_LIBRARY STATIC
         common/utils.cpp
         common/utils.h
         search_engine/search_engine.cpp
-        search_engine/search_engine.h tokenization/word_tokenizer.cpp tokenization/word_tokenizer.h)
+        search_engine/search_engine.h tokenization/word_tokenizer.cpp tokenization/word_tokenizer.h document/document_index.cpp document/document_index.h)
 
 add_executable(IndexBuilder
-        index_builder_app.cpp logging.cpp logging.h common/dictionary.cpp common/dictionary.h)
+        index_builder_app.cpp logging.cpp logging.h common/dictionary.cpp common/dictionary.h document/document_index.cpp document/document_index.h)
 
-add_executable(SearchApp search_app.cpp)
+add_executable(SearchApp search_app.cpp document/document_index.cpp document/document_index.h)
 
 target_link_libraries(IndexBuilder IR_LIBRARY)
 target_link_libraries(SearchApp IR_LIBRARY)
@@ -82,7 +82,7 @@ add_executable(IR_tests
         bsbi/tests/test_bsbi.cpp
         common/serialization/tests/tests.cpp
         boolean_queries/tests/tests.cpp
-        search_engine/tests/test.cpp)
+        search_engine/tests/test.cpp document/document_index.cpp document/document_index.h)
 
 target_link_libraries(IR_tests gtest gtest_main)
 target_link_libraries(IR_tests IR_LIBRARY)
